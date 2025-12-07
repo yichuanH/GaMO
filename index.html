@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>GaMO</title>
+  <link rel="icon" type="image/x-icon" href="static/images/icon.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+  
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .gradient-text {
+      background: linear-gradient(to top, #00e2d3, #00ccff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* 區段分隔 */
+    .comparison-section {
+      padding: 40px 0;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .comparison-section:last-child {
+      border-bottom: none;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .scenes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      width: 80%;
+      margin: 0 auto;
+      gap: 20px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* Outpainting 比較區段 */
+    .outpainting-scenes {
+      display: none;
+    }
+
+    .outpainting-scenes.active {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      width: 80%;
+      margin: 0 auto;
+      gap: 20px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    /* 單個場景容器 */
+    .scene-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .scene-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    /* Input Image */
+    .input-image {
+      width: 100%;
+      height: auto;
+      
+      display: block;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 15px;
+    }
+
+    .input-image-label {
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    /* 比較容器 */
+    .comparison-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    /* 影片容器 */
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 60%; /* 16:9 aspect ratio */
+      background: #000;
+    }
+
+    .comparison-video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* 右側影片（Ours） */
+    .video-ours {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      clip-path: inset(0 0 0 50%);
+      z-index: 2;
+    }
+
+    /* 滑桿容器 */
+    .slider-control {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 3px;
+      height: 100%;
+      background: #fff;
+      cursor: ew-resize;
+      z-index: 3;
+      transform: translateX(-50%);
+    }
+    
+    .footer-references {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+    /* 滑桿手柄 */
+    .slider-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .slider-handle::before {
+      content: '⟨';
+      position: absolute;
+      left: 6px;
+    }
+
+    .slider-handle::after {
+      content: '⟩';
+      position: absolute;
+      right: 6px;
+    }
+
+    /* 標籤 */
+    .video-label {
+      position: absolute;
+      top: 15px;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .label-left {
+      left: 15px;
+    }
+
+    .label-right {
+      right: 15px;
+    }
+
+    /* 方法切換器 */
+    .method-selector {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+    }
+
+    .method-button,
+    .outpainting-button {
+      padding: 10px 20px;
+      background: #fff;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .method-button:hover,
+    .outpainting-button:hover {
+      border-color: #3273dc;
+      transform: translateY(-2px);
+    }
+
+    .method-button.active,
+    .outpainting-button.active {
+      background: #3273dc;
+      color: white;
+      border-color: #3273dc;
+    }
+
+    /* 方法介紹區塊：改成純文字置中，沒有框框 */
+    .method-info {
+      width: 100%;
+      margin: 10px auto 0;
+      padding: 0 20px 10px;
+      background: none;
+      border-left: none;
+      border-radius: 0;
+      box-shadow: none;
+      text-align: center;
+    }
+
+    .method-info-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .method-info-venue {
+      font-size: 14px;
+      color: #666;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .method-info-venue.highlight {
+      color: #e74c3c;
+      font-weight: 600;
+    }
+
+    .method-info-venue.best-paper {
+      color: #f39c12;
+      font-weight: 600;
+    }
+
+    /* 響應式設計 - 平板 */
+    @media (max-width: 1200px) {
+      .scenes-grid, .outpainting-scenes.active {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .method-info {
+        width: 100%;
+        padding: 0 15px 10px;
+      }
+    }
+
+    /* 響應式設計 - 手機 */
+    @media (max-width: 768px) {
+      .scenes-grid, .outpainting-scenes.active {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 10px;
+      }
+
+      .slider-handle {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+      }
+      
+      .video-label {
+        font-size: 11px;
+        padding: 5px 10px;
+        top: 10px;
+      }
+      
+      .label-left {
+        left: 10px;
+      }
+      
+      .label-right {
+        right: 10px;
+      }
+
+      .scene-title {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 22px;
+      }
+    }
+    /* 分隔線：Input 6 views */
+    .views-divider-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80%;
+      margin: 20px auto 0;
+      gap: 12px;
+    }
+
+    .views-divider-line {
+      flex: 1;
+      height: 1px;
+      background: #ddd;
+    }
+
+    .views-divider-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #555;
+      white-space: nowrap;
+    }
+
+    /* 3 views 的 input image：靠左 + 變小 + 與影片拉開距離 */
+    .scenes-grid-3views .scene-item .input-image {
+      width: 55%;          /* 圖片尺寸（你可改成 50%-70%） */
+      margin: 0;           /* 靠左 */
+      display: block;
+      border-radius: 0px;
+
+      margin-bottom: 12px; /* 與下面影片拉開距離（可調） */
+    }
+
+    /* 只調整最上面標題那塊的高度 */
+  .hero-header .hero-body {
+    padding-top: 1.5rem;   /* 原本 Bulma 大概是 3rem，可以自己再調小 */
+    padding-bottom: 0.5rem; /* 這個往下縮一點，下面空白就會少很多 */
+  }
+
+  /* 如果還覺得整塊跟下一段之間太開，可以再加這個 */
+  .hero-header {
+    margin-bottom: 0.5rem; /* 或 0 */
+  }
+
+    /* 3 views 區塊的影片不要這麼高 */
+  .scenes-grid-3views .video-wrapper {
+    padding-bottom: 65%;  /* 可以試 45%、40% 自己調到喜歡的高度 */
+  }
+
+
+    /* 整塊 reference 的外框樣式 + 橫向滑動 */
+  .references-box {
+    border: 1px solid #e0e0e0;    /* 外框線 */
+    border-radius: 8px;           /* 圓角框 */
+    padding: 1.25rem 1.5rem;      /* 內距 */
+    background: #fafafa;          /* 淡灰底，看起來像一塊區域 */
+    
+    overflow-x: auto;             /* 單行太長就可以左右滑 */
+    overflow-y: visible;          /* 直向正常顯示 */
+  }
+
+  /* 讓列表排版更美一點，可加可不加 */
+  .footer-references ol {
+    margin-left: 1.25rem;
+    padding-left: 1.25rem;
+  }
+
+  .footer-references li {
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+
+    /* 輪播樣式 */
+  .teaser-carousel-container {
+    position: relative;
+    width: 80%;
+    max-width: 1400px;
+    margin: 40px auto;
+  }
+
+  .carousel-viewport {
+    overflow: hidden;
+    position: relative;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+
+  .carousel-item {
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+
+
+  /* 箭頭按鈕 */
+  .carousel-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+  }
+
+  .carousel-arrow:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .carousel-arrow-left {
+    left: -25px;
+  }
+
+  .carousel-arrow-right {
+    right: -25px;
+  }
+
+  /* 指示圓點 */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .carousel-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ddd;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .carousel-dot.active {
+    background: #3273dc;
+    transform: scale(1.2);
+  }
+
+  /* 響應式設計 */
+  @media (max-width: 768px) {
+    .carousel-item {
+      min-width: 100%;
+    }
+    
+    .carousel-arrow {
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+    }
+    
+    .carousel-arrow-left {
+      left: 10px;
+    }
+    
+    .carousel-arrow-right {
+      right: 10px;
+    }
+  }
+
+  .pipeline-section .input-image {
+  box-shadow: none !important;
+}
+
+.pipeline-section .input-image:first-of-type {
+  margin-bottom: 50px;
+}
+
+  .pipeline-section .gamo-large {
+    width: 100%;
+    max-width: 100%;
+    transform: scale(1.2);   /* ✅ 放大 1.2 倍，可改成 1.3、1.4 */
+    transform-origin: center center;
+  }
+
+/* ✅ 每一個 section 開頭都加一小段淡橘色線（間距縮小版） */
+.section {
+  position: relative;
+}
+
+.section::before {
+  content: "";
+  display: block;
+  width: 80px;               /* 線的長度 */
+  height: 3px;               /* 線的粗細 */
+  background-color: #ffcc99; /* 淡橘色 */
+  margin: 0 auto 12px;       /* ✅ 原本 24px → 改成 12px */
+}
+
+  </style>
+
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.148.0/examples/js/loaders/OBJLoader.js"></script>
+
+  
+</head>
+<body>
+
+<section class="hero hero-header">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <div style="text-align: center;">
+              <img src="static/images/logo.png" alt="Voxify3D Logo" style="height: 80px; margin-bottom: 10px;">
+              <h1 class="title is-4 publication-title">
+                GaMO: Geometry-aware Multi-view Diffusion Outpainting for Sparse-View 3D Reconstruction
+              </h1>
+                          
+            <!-- Authors -->
+            <div class="is-size-5 publication-authors" style="margin-top: 20px;">
+              <span class="author-block">
+                <a href="https://yichuanh.github.io/Personal-Page/" target="_blank">Yi-Chuan Huang</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="#" style="cursor: default; pointer-events: none; text-decoration: none;">Hao-Jen Chien</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://linjohnss.github.io/" target="_blank">Chin-Yang Lin</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="#" style="cursor: default; pointer-events: none; text-decoration: none;">Yin-Huan Chen</a><sup>1</sup>,
+              </span>
+              <span class="author-block">
+                <a href="https://yulunalexliu.github.io/" target="_blank">Yu-Lun Liu</a><sup>1</sup>
+              </span>
+            </div>
+
+            <!-- Institutions -->
+            <div class="is-size-5 publication-authors" style="margin-top: 10px;">
+              <span class="author-block"><sup>1</sup>National Yang Ming Chiao Tung University</span>
+            </div>
+
+              <!-- Links/Buttons -->
+              <div class="publication-links" style="margin-top: 20px;">
+                <!-- Paper Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/YOUR_PAPER_ID" 
+                     class="external-link button is-normal is-rounded is-dark"
+                     style="margin: 5px;">
+                    <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                    </span>
+                    <span>arXiv</span>
+                  </a>
+                </span>
+                
+                <!-- Code Link -->
+                <span class="link-block">
+                  <a href="https://github.com/yourusername/GaMO"
+                     class="external-link button is-normal is-rounded is-dark"
+                     style="margin: 5px;">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Teaser Image 移到 container 外面 -->
+      <div style="margin-top: 30px; text-align: center;">
+        <img src="static/images/teaser.png" alt="GaMO Overview" 
+             style="width: 80%; max-width: 1400px; display: inline-block;">
+      </div>
+
+      <!-- 影片輪播區 -->
+      <div class="teaser-carousel-container" style="margin-top: 40px; position: relative;">
+        <!-- 左箭頭 -->
+        <button class="carousel-arrow carousel-arrow-left" onclick="moveCarousel(-1)">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        
+        <!-- 右箭頭 -->
+        <button class="carousel-arrow carousel-arrow-right" onclick="moveCarousel(1)">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- 影片容器 -->
+        <div class="carousel-viewport">
+          <div class="carousel-track" id="carouselTrack">
+            <!-- Room 0 -->
+            <div class="carousel-item">
+              <div class="comparison-container" data-scene="room_0" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Replica_6/room_0/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Replica_6/room_0/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
+
+
+              <div class="carousel-item">
+              <div class="comparison-container" data-scene="office_2" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Replica_3/office_2/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Replica_3/office_2/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
+
+
+                        <!-- Room 2 -->
+            <div class="carousel-item">
+              <div class="comparison-container" data-scene="room_2" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Replica_6/room_2/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
+
+
+               <div class="carousel-item">
+              <div class="comparison-container" data-scene="office_3" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Replica_3/office_3/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Replica_3/office_3/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="carousel-item">
+              <div class="comparison-container" data-scene="office_4" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Replica_3/office_4/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Replica_3/office_4/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <!-- 8a20 -->
+            <div class="carousel-item">
+              <div class="comparison-container" data-scene="8a20" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Scannetpp_6/8a20/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Scannetpp_6/8a20/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 94ee -->
+            <div class="carousel-item">
+              <div class="comparison-container" data-scene="94ee" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Scannetpp_6/94ee/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- a29c -->
+            <div class="carousel-item">
+              <div class="comparison-container" data-scene="a29c" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Scannetpp_6/a29c/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Scannetpp_6/a29c/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
+
+  
+
+                       
+
+
+
+
+
+          </div>
+        </div>
+
+        <!-- 指示圓點 -->
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+
+    </div>
+</section>
+
+<!-- Abstract Section -->
+<section class="section" style="padding: 40px 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h2 class="title is-3" style="text-align: center; margin-bottom: 30px;">Abstract</h2>
+        <div class="content has-text-justified" style="font-size: 14px; line-height: 1.6;">
+          <p>
+            Recent advances in 3D reconstruction have achieved remarkable progress in high-quality scene capture from dense multi-view imagery, yet struggle when input views are limited. Various approaches, including regularization techniques, semantic priors, and geometric constraints, have been implemented to address this challenge. Latest diffusion-based methods have demonstrated substantial improvements by generating novel views from new camera poses to augment training data, surpassing earlier regularization and prior-based techniques. Despite this progress, we identify three critical limitations in these state-of-the-art approaches: inadequate coverage beyond known view peripheries, geometric inconsistencies across generated views, and computationally expensive pipelines. We introduce <strong>GaMO (Geometry-aware Multi-view Outpainter)</strong>, a framework that reformulates sparse-view reconstruction through multi-view outpainting. Instead of generating new viewpoints, GaMO expands the field of view from existing camera poses, which inherently preserves geometric consistency while providing broader scene coverage. Our approach employs multi-view conditioning and geometry-aware denoising strategies in a zero-shot manner without training. Extensive experiments on Replica and ScanNet++ demonstrate state-of-the-art reconstruction quality across 3, 6, and 9 input views, outperforming prior methods in PSNR and LPIPS, while achieving a <strong>25× speedup</strong> over SOTA diffusion-based methods with processing time under 10 minutes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Pipeline Section -->
+<section class="section pipeline-section" style="padding: 40px 0;">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h2 class="title is-3" style="text-align: center; margin-bottom: 30px;">Pipeline</h2>
+        <div class="content has-text-justified" style="font-size: 14px; line-height: 1.6;">
+        <img src="static/images/pipeline.png" alt="pipeline" class="input-image">
+        <img src="static/images/Gamo.png" alt="Gamo" class="input-image gamo-large">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Section 1: Interactive Comparison -->
+   <section class="section">
+    <div style="width: 100%; padding: 0;">
+      <div style="width: 100%; padding: 0;">
+
+        <h2 class="section-title">Interactive Comparison with SOTA</h2>
+
+        <!-- 方法選擇器 -->
+        <div class="method-selector" style="padding: 0 20px;">
+          <span style="font-weight: bold; margin-right: 10px; font-size: 16px;">Compare with:</span>
+          <button class="method-button active" data-method="3dgs">3DGS</button>
+          <button class="method-button" data-method="fsgs">FSGS</button>
+          <button class="method-button" data-method="instantsplat">InstantSplat</button>
+          <button class="method-button" data-method="difix3d">Difix3D</button>
+          <button class="method-button" data-method="guidedvd">GuidedVD-3DGS</button>
+        </div>
+
+        <!-- 方法介紹區塊 -->
+        <div class="method-info" id="method-info-interactive">
+          <div class="method-info-title">3DGS : 3D Gaussian Splatting for Real-Time Radiance Field Rendering</div>
+          <div class="method-info-venue">SIGGRAPH 2023</div>
+        </div>
+        
+      <!-- ✅ 分隔線 & 6 views 標示 -->
+      <div class="views-divider-wrapper">
+        <div class="views-divider-line"></div>
+        <div class="views-divider-label">Input 6 views</div>
+        <div class="views-divider-line"></div>
+      </div>
+
+
+        <!-- 場景網格 -->
+        <div class="scenes-grid">
+          <!-- Room 0 -->
+          <div class="scene-item">
+            <div class="scene-title">room 0</div>
+            <img src="static/images/room_0.png" alt="room 0 input" class="input-image">
+            <div class="comparison-container" data-scene="room_0" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Replica_6/room_0/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Replica_6/room_0/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Room 1 -->
+          <div class="scene-item">
+            <div class="scene-title">room 1</div>
+            <img src="static/images/room_1.png" alt="room 1 input" class="input-image">
+            <div class="comparison-container" data-scene="room_1" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Replica_6/room_1/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Replica_6/room_1/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Room 2 -->
+          <div class="scene-item">
+            <div class="scene-title">room 2</div>
+            <img src="static/images/room_2.png" alt="room 2 input" class="input-image">
+            <div class="comparison-container" data-scene="room_2" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Replica_6/room_2/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 8a20 -->
+          <div class="scene-item">
+            <div class="scene-title">8a20</div>
+            <img src="static/images/8a20.png" alt="8a20 input" class="input-image">
+            <div class="comparison-container" data-scene="8a20" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Scannetpp_6/8a20/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Scannetpp_6/8a20/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 94ee -->
+          <div class="scene-item">
+            <div class="scene-title">94ee</div>
+            <img src="static/images/94ee.png" alt="94ee input" class="input-image">
+            <div class="comparison-container" data-scene="94ee" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Scannetpp_6/94ee/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- a29c -->
+          <div class="scene-item">
+            <div class="scene-title">a29c</div>
+            <img src="static/images/a29c.png" alt="a29c input" class="input-image">
+            <div class="comparison-container" data-scene="a29c" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Scannetpp_6/a29c/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Scannetpp_6/a29c/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+
+
+        <!-- ✅ 分隔線 & 3 views 標示 -->
+        <div class="views-divider-wrapper">
+          <div class="views-divider-line"></div>
+          <div class="views-divider-label">Input 3 views</div>
+          <div class="views-divider-line"></div>
+        </div>
+
+        <div class="scenes-grid scenes-grid-3views">
+
+          <!-- 8a20 -->
+          <div class="scene-item">
+            <div class="scene-title">office 2</div>
+            <img src="static/images/office_2.png" alt="office_2 input" class="input-image">
+            <div class="comparison-container" data-scene="office_2" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Replica_3/office_2/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Replica_3/office_2/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 94ee -->
+          <div class="scene-item">
+            <div class="scene-title">office 3</div>
+            <img src="static/images/office_3.png" alt="office_3 input" class="input-image">
+            <div class="comparison-container" data-scene="office_3" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Replica_3/office_3/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Replica_3/office_3/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- a29c -->
+          <div class="scene-item">
+            <div class="scene-title">office_4</div>
+            <img src="static/images/office_4.png" alt="office 4 input" class="input-image">
+            <div class="comparison-container" data-scene="office_4" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/Replica_3/office_4/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/Replica_3/office_4/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control">
+                  <div class="slider-handle"></div>
+                </div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- end scenes-grid -->
+    
+
+
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Outpainting Comparison -->
+   <section class="section">
+    <div style="width: 100%; padding: 0;">
+      <h2 class="section-title">Outpainting Comparison Using Multi-View Diffusion Models</h2>
+      
+      <!-- 方法選擇器 -->
+      <div class="method-selector" style="padding: 0 20px;">
+        <span style="font-weight: bold; margin-right: 10px; font-size: 16px;">Compare with:</span>
+        <button class="outpainting-button active" data-outpainting-method="mvgenmaster">MVGenMaster</button>
+        <button class="outpainting-button" data-outpainting-method="seva">SEVA</button>
+      </div>
+
+      <!-- 方法介紹區塊 -->
+      <div class="method-info" id="method-info-outpainting">
+        <div class="method-info-title">Scaling Multi-View Generation from Any Image via 3D Priors Enhanced Diffusion Model</div>
+        <div class="method-info-venue">CVPR 2025</div>
+      </div>
+
+
+      
+
+      <!-- MVGenMaster Scenes -->
+      <div class="outpainting-scenes active" id="mvgenmaster-scenes">
+        <!-- Scene 1 -->
+        <div class="scene-item">
+          <div class="scene-title">office_2</div>
+          <div class="comparison-container" data-scene="mvgen_room_0" data-section="outpainting">
+            <div class="video-wrapper">
+              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                <source class="source-comparison" src="static/videos/Replica_6_mvg/office_2/ours.mp4" type="video/mp4">
+              </video>
+              <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                <source class="source-ours" src="static/videos/Replica_6/office_2/ours.mp4" type="video/mp4">
+              </video>
+              <div class="slider-control">
+                <div class="slider-handle"></div>
+              </div>
+              <div class="video-label label-left">MVGenMaster</div>
+              <div class="video-label label-right">Ours</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 2 -->
+        <div class="scene-item">
+          <div class="scene-title">room 2</div>
+          <div class="comparison-container" data-scene="mvgen_room_1" data-section="outpainting">
+            <div class="video-wrapper">
+              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                <source class="source-comparison" src="static/videos/Replica_6_mvg/room_2/ours.mp4" type="video/mp4">
+              </video>
+              <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
+              </video>
+              <div class="slider-control">
+                <div class="slider-handle"></div>
+              </div>
+              <div class="video-label label-left">MVGenMaster</div>
+              <div class="video-label label-right">Ours</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3 -->
+        <div class="scene-item">
+          <div class="scene-title">94ee</div>
+          <div class="comparison-container" data-scene="mvgen_94ee" data-section="outpainting">
+            <div class="video-wrapper">
+              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                <source class="source-comparison" src="static/videos/Scannetpp_6_mvg/94ee/ours.mp4" type="video/mp4">
+              </video>
+              <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
+              </video>
+              <div class="slider-control">
+                <div class="slider-handle"></div>
+              </div>
+              <div class="video-label label-left">MVGenMaster</div>
+              <div class="video-label label-right">Ours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEVA Scenes -->
+      <div class="outpainting-scenes" id="seva-scenes">
+        <!-- Scene 1 -->
+        <div class="scene-item">
+          <div class="scene-title">office 2</div>
+          <div class="comparison-container" data-scene="seva_8a20" data-section="outpainting">
+            <div class="video-wrapper">
+              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                <source class="source-comparison" src="static/videos/Replica_6_seva/office_2/ours.mp4" type="video/mp4">
+              </video>
+              <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                <source class="source-ours" src="static/videos/Replica_6/office_2/ours.mp4" type="video/mp4">
+              </video>
+              <div class="slider-control">
+                <div class="slider-handle"></div>
+              </div>
+              <div class="video-label label-left">SEVA</div>
+              <div class="video-label label-right">Ours</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 2 -->
+        <div class="scene-item">
+          <div class="scene-title">room 2</div>
+          <div class="comparison-container" data-scene="seva_94ee" data-section="outpainting">
+            <div class="video-wrapper">
+              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                <source class="source-comparison" src="static/videos/Replica_6_seva/room_2/ours.mp4" type="video/mp4">
+              </video>
+              <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
+              </video>
+              <div class="slider-control">
+                <div class="slider-handle"></div>
+              </div>
+              <div class="video-label label-left">SEVA</div>
+              <div class="video-label label-right">Ours</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scene 3 -->
+        <div class="scene-item">
+          <div class="scene-title">94ee</div>
+          <div class="comparison-container" data-scene="seva_a29c" data-section="outpainting">
+            <div class="video-wrapper">
+              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                <source class="source-comparison" src="static/videos/Scannetpp_6_seva/94ee/ours.mp4" type="video/mp4">
+              </video>
+              <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
+              </video>
+              <div class="slider-control">
+                <div class="slider-handle"></div>
+              </div>
+              <div class="video-label label-left">SEVA</div>
+              <div class="video-label label-right">Ours</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <div class="content footer-references references-box">
+          <h3 style="font-weight: 700; margin-bottom: 0.5rem;">References</h3>
+          <ol>
+            <li>
+              Kerbl, B., Kopanas, G., Leimk&uuml;hler, T., and Drettakis, G.
+              “3D Gaussian Splatting for Real-Time Radiance Field Rendering.”
+              <em>ACM Transactions on Graphics (TOG)</em>, 42(4), 2023.
+            </li>
+            <li>
+              Zhu, Z., Fan, Z., Jiang, Y., and Wang, Z.
+              “FSGS: Real-Time Few-Shot View Synthesis Using Gaussian Splatting.”
+              In <em>European Conference on Computer Vision (ECCV)</em>, 2024.
+            </li>
+            <li>
+              Fan, Z., Cong, W., Wen, K., Wang, K., Zhang, J., Ding, X., Xu, D., Ivanovic, B., Pavone, M., Pavlakos, G., <em>et al.</em>
+              “InstantSplat: Unbounded Sparse-View Pose-Free Gaussian Splatting in 40 Seconds.”
+              <em>arXiv preprint arXiv:2403.20309</em>, 2024.
+            </li>
+            <li>
+              Wu, J. Z., Zhang, Y., Turki, H., Ren, X., Gao, J., Shou, M. Z., Fidler, S., Gojcic, Z., and Ling, H.
+              “Difix3D+: Improving 3D Reconstructions with Single-Step Diffusion Models.”
+              In <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2025.
+            </li>
+            <li>
+              Zhong, Y., Li, Z., Chen, D. Z., Hong, L., and Xu, D.
+              “Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs.”
+              In <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2025.
+            </li>
+            <li>
+              Cao, C., Yu, C., Liu, S., Wang, F., Xue, X., and Fu, Y.
+              “MVGenMaster: Scaling Multi-View Generation from Any Image via 3D Priors Enhanced Diffusion Model.”
+              In <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2025.
+            </li>
+            <li>
+              Zhou, J., Gao, H., Voleti, V., Vasishta, A., Yao, C.-H., Boss, M., Torr, P., Rupprecht, C., and Jampani, V.
+              “Stable Virtual Camera: Generative View Synthesis with Diffusion Models.”
+              <em>arXiv preprint arXiv:2503.14489</em>, 2025.
+            </li>
+
+            <!-- ====================== 新增的兩筆 ====================== -->
+
+            <li>
+              Straub, J., Whelan, T., Ma, L., Chen, Y., Wijmans, E., Green, S., Engel, J., Mur-Artal, R., Ren, C., Verma, S., <em>et al.</em>
+              “The Replica Dataset: A Digital Replica of Indoor Spaces.”
+              <em>arXiv preprint arXiv:1906.05797</em>, 2019.
+            </li>
+
+            <li>
+              Yeshwanth, C., Liu, Y.-C., Nießner, M., and Dai, A.
+              “ScanNet++: A High-Fidelity Dataset of 3D Indoor Scenes.”
+              In <em>Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)</em>, pp. 12–22, 2023.
+            </li>
+
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+
+  <script>
+  (function() {
+    // 資料結構：場景 -> 方法 -> 影片路徑
+    const videoData = {
+      'a29c': {
+        '3dgs': 'static/videos/Scannetpp_6/a29c/3dgs.mp4',
+        'fsgs': 'static/videos/Scannetpp_6/a29c/fsgs.mp4',
+        'instantsplat': 'static/videos/Scannetpp_6/a29c/instant.mp4',
+        'difix3d': 'static/videos/Scannetpp_6/a29c/difix.mp4',
+        'guidedvd': 'static/videos/Scannetpp_6/a29c/guidedvd.mp4',
+        'ours': 'static/videos/Scannetpp_6/a29c/ours.mp4'
+      },
+      '8a20': {
+        '3dgs': 'static/videos/Scannetpp_6/8a20/3dgs.mp4',
+        'fsgs': 'static/videos/Scannetpp_6/8a20/fsgs.mp4',
+        'instantsplat': 'static/videos/Scannetpp_6/8a20/instant.mp4',
+        'difix3d': 'static/videos/Scannetpp_6/8a20/difix.mp4',
+        'guidedvd': 'static/videos/Scannetpp_6/8a20/guidedvd.mp4',
+        'ours': 'static/videos/Scannetpp_6/8a20/ours.mp4'
+      },
+      '94ee': {
+        '3dgs': 'static/videos/Scannetpp_6/94ee/3dgs.mp4',
+        'fsgs': 'static/videos/Scannetpp_6/94ee/fsgs.mp4',
+        'instantsplat': 'static/videos/Scannetpp_6/94ee/instant.mp4',
+        'difix3d': 'static/videos/Scannetpp_6/94ee/difix.mp4',
+        'guidedvd': 'static/videos/Scannetpp_6/94ee/guidedvd.mp4',
+        'ours': 'static/videos/Scannetpp_6/94ee/ours.mp4'
+      },
+      'room_0': {
+        '3dgs': 'static/videos/Replica_6/room_0/3dgs.mp4',
+        'fsgs': 'static/videos/Replica_6/room_0/fsgs.mp4',
+        'instantsplat': 'static/videos/Replica_6/room_0/instant.mp4',
+        'difix3d': 'static/videos/Replica_6/room_0/difix.mp4',
+        'guidedvd': 'static/videos/Replica_6/room_0/guidedvd.mp4',
+        'ours': 'static/videos/Replica_6/room_0/ours.mp4'
+      },
+      'room_1': {
+        '3dgs': 'static/videos/Replica_6/room_1/3dgs.mp4',
+        'fsgs': 'static/videos/Replica_6/room_1/fsgs.mp4',
+        'instantsplat': 'static/videos/Replica_6/room_1/instant.mp4',
+        'difix3d': 'static/videos/Replica_6/room_1/difix.mp4',
+        'guidedvd': 'static/videos/Replica_6/room_1/guidedvd.mp4',
+        'ours': 'static/videos/Replica_6/room_1/ours.mp4'
+      },
+      'room_2': {
+        '3dgs': 'static/videos/Replica_6/room_2/3dgs.mp4',
+        'fsgs': 'static/videos/Replica_6/room_2/fsgs.mp4',
+        'instantsplat': 'static/videos/Replica_6/room_2/instant.mp4',
+        'difix3d': 'static/videos/Replica_6/room_2/difix.mp4',
+        'guidedvd': 'static/videos/Replica_6/room_2/guidedvd.mp4',
+        'ours': 'static/videos/Replica_6/room_2/ours.mp4'
+      },
+        // ===== 3 views scenes =====
+      'office_2': {
+        '3dgs': 'static/videos/Replica_3/office_2/3dgs.mp4',
+        'fsgs': 'static/videos/Replica_3/office_2/fsgs.mp4',
+        'instantsplat': 'static/videos/Replica_3/office_2/instant.mp4',
+        'difix3d': 'static/videos/Replica_3/office_2/difix.mp4',
+        'guidedvd': 'static/videos/Replica_3/office_2/guidedvd.mp4',
+        'ours': 'static/videos/Replica_3/office_2/ours.mp4'
+      },
+      'office_3': {
+        '3dgs': 'static/videos/Replica_3/office_3/3dgs.mp4',
+        'fsgs': 'static/videos/Replica_3/office_3/fsgs.mp4',
+        'instantsplat': 'static/videos/Replica_3/office_3/instant.mp4',
+        'difix3d': 'static/videos/Replica_3/office_3/difix.mp4',
+        'guidedvd': 'static/videos/Replica_3/office_3/guidedvd.mp4',
+        'ours': 'static/videos/Replica_3/office_3/ours.mp4'
+      },
+      'office_4': {
+        '3dgs': 'static/videos/Replica_3/office_4/3dgs.mp4',
+        'fsgs': 'static/videos/Replica_3/office_4/fsgs.mp4',
+        'instantsplat': 'static/videos/Replica_3/office_4/instant.mp4',
+        'difix3d': 'static/videos/Replica_3/office_4/difix.mp4',
+        'guidedvd': 'static/videos/Replica_3/office_4/guidedvd.mp4',
+        'ours': 'static/videos/Replica_3/office_4/ours.mp4'
+      }
+
+
+
+    };
+
+    // 方法名稱對應
+    const methodNames = {
+      '3dgs': '3DGS',
+      'fsgs': 'FSGS',
+      'instantsplat': 'InstantSplat',
+      'difix3d': 'Difix3D',
+      'guidedvd': 'GuidedVD-3DGS'
+    };
+
+    // 方法詳細資訊
+    const methodInfo = {
+      '3dgs': {
+        title: '3DGS : 3D Gaussian Splatting for Real-Time Radiance Field Rendering',
+        venue: 'SIGGRAPH 2023',
+        venueClass: ''
+      },
+      'fsgs': {
+        title: 'FSGS : Real-Time Few-Shot View Synthesis using Gaussian Splatting',
+        venue: 'ECCV 2024',
+        venueClass: ''
+      },
+      'instantsplat': {
+        title: 'InstantSplat: Sparse-view Gaussian Splatting in Seconds',
+        venue: 'arXiv 2025',
+        venueClass: ''
+      },
+      'difix3d': {
+        title: 'Difix3D+ : Improving 3D Reconstructions with Single-Step Diffusion Models',
+        venue: 'CVPR 2025 Oral, Best Paper Candidate',
+        venueClass: 'best-paper'
+      },
+      'guidedvd': {
+        title: 'Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs',
+        venue: 'CVPR 2025 Highlight',
+        venueClass: 'highlight'
+      }
+    };
+
+// Outpainting 方法資訊
+    const outpaintingMethodInfo = {
+      'mvgenmaster': {
+        title: 'Scaling Multi-View Generation from Any Image via 3D Priors Enhanced Diffusion Model',
+        venue: 'CVPR 2025',
+        venueClass: ''
+      },
+    'seva': {
+      title: 'Stable Virtual Camera: Generative View Synthesis with Diffusion Models',
+      venue: 'arXiv 2025',
+      venueClass: ''
+    }
+
+    };
+
+    // 當前選擇的方法
+    let currentMethod = '3dgs';
+
+    // 獲取所有比較容器
+    const containers = document.querySelectorAll('.comparison-container');
+
+    // 為每個場景初始化滑桿
+    containers.forEach(container => {
+      const scene = container.dataset.scene;
+      const slider = container.querySelector('.slider-control');
+      const videoComparison = container.querySelector('.video-comparison');
+      const videoOurs = container.querySelector('.video-ours');
+      
+      let isDragging = false;
+      let isSyncing = false;
+
+      function updateSliderPosition(clientX) {
+        const rect = container.getBoundingClientRect();
+        let position = ((clientX - rect.left) / rect.width) * 100;
+        position = Math.max(0, Math.min(100, position));
+
+        slider.style.left = position + '%';
+        videoOurs.style.clipPath = `inset(0 0 0 ${position}%)`;
+      }
+
+      // 滑鼠事件：滑過整個比較區塊就會移動滑軌
+    container.addEventListener('mousemove', (e) => {
+      // 只要滑鼠在這個 container 上，就更新位置
+      updateSliderPosition(e.clientX);
+    });
+      // 觸控事件
+      slider.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        e.preventDefault();
+      });
+
+      document.addEventListener('touchmove', (e) => {
+        if (isDragging && e.target.closest('.comparison-container') === container) {
+          updateSliderPosition(e.touches[0].clientX);
+        }
+      });
+
+      document.addEventListener('touchend', () => {
+        isDragging = false;
+      });
+
+      // 持續同步影片時間 - 使用 requestAnimationFrame 提供更高頻率的同步
+      function syncVideos() {
+        if (!isSyncing) {
+          const timeDiff = Math.abs(videoComparison.currentTime - videoOurs.currentTime);
+          
+          // 如果時間差超過 0.05 秒（減少閾值以提高同步精度），立即同步
+          if (timeDiff > 0.05) {
+            isSyncing = true;
+            
+            // 使用播放速度較快的影片作為基準
+            const targetTime = Math.max(videoComparison.currentTime, videoOurs.currentTime);
+            videoComparison.currentTime = targetTime;
+            videoOurs.currentTime = targetTime;
+            
+            setTimeout(() => { isSyncing = false; }, 30);
+          }
+        }
+        
+        requestAnimationFrame(syncVideos);
+      }
+      
+      // 開始持續同步循環
+      syncVideos();
+
+      // 當影片載入完成時，確保從零開始同步
+      videoComparison.addEventListener('loadeddata', () => {
+        videoComparison.currentTime = 0;
+        videoOurs.currentTime = 0;
+      });
+
+      videoOurs.addEventListener('loadeddata', () => {
+        if (videoComparison.readyState >= 2) {
+          videoOurs.currentTime = videoComparison.currentTime;
+        }
+      });
+    });
+
+    // 更新互動比較區段的影片
+    function updateInteractiveVideos() {
+      const interactiveContainers = document.querySelectorAll('[data-section="interactive"]');
+      
+      interactiveContainers.forEach(container => {
+        const scene = container.dataset.scene;
+        const sourceComparison = container.querySelector('.source-comparison');
+        const sourceOurs = container.querySelector('.source-ours');
+        const videoComparison = container.querySelector('.video-comparison');
+        const videoOurs = container.querySelector('.video-ours');
+        const methodLabel = container.querySelector('.method-label');
+
+        // 更新影片來源
+        sourceComparison.src = videoData[scene][currentMethod];
+        sourceOurs.src = videoData[scene]['ours'];
+
+        // 重新載入並播放
+        videoComparison.load();
+        videoOurs.load();
+        videoComparison.play();
+        videoOurs.play();
+
+        // 更新標籤
+        methodLabel.textContent = methodNames[currentMethod];
+      });
+
+      // 更新方法介紹
+      updateMethodInfo(currentMethod);
+    }
+
+    // 更新方法介紹資訊
+    function updateMethodInfo(method) {
+      const info = methodInfo[method];
+      const infoBlock = document.getElementById('method-info-interactive');
+      const titleElement = infoBlock.querySelector('.method-info-title');
+      const venueElement = infoBlock.querySelector('.method-info-venue');
+      
+      titleElement.textContent = info.title;
+      venueElement.innerHTML = info.venue;
+      venueElement.className = 'method-info-venue ' + info.venueClass;
+    }
+
+    // 更新 Outpainting 方法介紹資訊
+    function updateOutpaintingMethodInfo(method) {
+      const info = outpaintingMethodInfo[method];
+      const infoBlock = document.getElementById('method-info-outpainting');
+      const titleElement = infoBlock.querySelector('.method-info-title');
+      const venueElement = infoBlock.querySelector('.method-info-venue');
+      
+      titleElement.textContent = info.title;
+      venueElement.innerHTML = info.venue;
+      venueElement.className = 'method-info-venue ' + info.venueClass;
+    }
+
+    // 方法切換（僅影響互動比較區段）
+    document.querySelectorAll('.method-button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.method-button').forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+        currentMethod = button.dataset.method;
+        updateInteractiveVideos();
+      });
+    });
+
+    // Outpainting 方法切換
+    document.querySelectorAll('.outpainting-button').forEach(button => {
+      button.addEventListener('click', () => {
+        // 更新按鈕狀態
+        document.querySelectorAll('.outpainting-button').forEach(b => b.classList.remove('active'));
+        button.classList.add('active');
+        
+        // 切換顯示的場景組
+        const method = button.dataset.outpaintingMethod;
+        document.querySelectorAll('.outpainting-scenes').forEach(scenes => {
+          scenes.classList.remove('active');
+        });
+        
+        const activeScenes = document.getElementById(method + '-scenes');
+        activeScenes.classList.add('active');
+        
+        // 更新方法介紹
+        updateOutpaintingMethodInfo(method);
+        
+        // 重新播放所有影片
+        setTimeout(() => {
+          const videos = activeScenes.querySelectorAll('video');
+          videos.forEach(video => {
+            video.currentTime = 0;
+            video.play().catch(err => console.log('Video play failed:', err));
+          });
+        }, 100);
+      });
+    });
+
+    console.log('[Comparison Grid] Initialized with', containers.length, 'comparison containers');
+  })();
+  </script>
+  <script>
+  let currentSlide = 0;
+  let itemsPerView = window.innerWidth <= 768 ? 1 : 4;
+  const track = document.getElementById('carouselTrack');
+  const items = document.querySelectorAll('.carousel-item');
+  let totalSlides = Math.ceil(items.length / itemsPerView);
+
+  // 初始化指示圓點
+  function initDots() {
+    const dotsContainer = document.getElementById('carouselDots');
+    dotsContainer.innerHTML = '';  // 先清空，避免重複疊加
+
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === currentSlide ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  // 移動輪播（左右箭頭用）
+  function moveCarousel(direction) {
+    currentSlide += direction;
+    if (currentSlide < 0) currentSlide = totalSlides - 1;
+    if (currentSlide >= totalSlides) currentSlide = 0;
+    updateCarousel();
+  }
+
+  // 跳到指定頁（圓點用）
+  function goToSlide(slideIndex) {
+    currentSlide = slideIndex;
+    updateCarousel();
+  }
+
+  // 更新輪播位置
+  function updateCarousel() {
+    // 每一頁直接視為 100% 寬度
+    const offset = currentSlide * 100;
+    track.style.transform = `translateX(-${offset}%)`;
+    
+    const dots = document.querySelectorAll('.carousel-dot');
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentSlide);
+    });
+  }
+
+  // 視窗縮放時更新 itemsPerView（桌機 4 個 / 手機 1 個）
+  function onResize() {
+    const newItemsPerView = window.innerWidth <= 768 ? 1 : 4;
+    if (newItemsPerView !== itemsPerView) {
+      itemsPerView = newItemsPerView;
+      totalSlides = Math.ceil(items.length / itemsPerView);
+      currentSlide = 0;
+      initDots();
+      updateCarousel();
+    }
+  }
+
+  window.addEventListener('resize', onResize);
+
+  // 初始化
+  initDots();
+  updateCarousel();
+</script>
+
+
+</body>
+</html>
