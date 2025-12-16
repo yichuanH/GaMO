@@ -444,8 +444,8 @@
   }
 
   .carousel-item {
-    flex: 0 0 25%;
-    max-width: 25%;
+    flex: 0 0 33.33%;
+    max-width: 33.33%;
     padding: 0 10px;
     box-sizing: border-box;
   }
@@ -557,6 +557,202 @@
   margin: 0 auto 12px;       /* ✅ 原本 24px → 改成 12px */
 }
 
+.method-info-authors {
+  font-size: 15px;       /* 字體大小適中 */
+  color: #4a4a4a;        /* 深灰色，比標題淺一點點 */
+  margin-bottom: 4px;    /* 與下方會議名稱保持一點距離 */
+  text-align: center;    /* 置中對齊 */
+  line-height: 1.4;
+}
+
+/* 外層容器 */
+.img-comp-wrapper {
+  display: flex;
+  flex-direction: column; /* ✅ 關鍵：改成垂直排列 (上:縮圖, 下:大圖) */
+  width: 100%;
+  margin-bottom: 20px;
+  gap: 10px;
+  background: none;
+  padding: 0;
+  border: none;
+}
+
+/* === 上方：縮圖區塊 === */
+.thumb-col {
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* 標籤在縮圖的上方或下方，這裡保持垂直 */
+  gap: 5px;
+}
+
+
+/* 縮圖列表 (水平捲動) */
+.thumb-list {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 2px;             /* ✅ 修改這裡：原本是 6px，改小一點讓它們靠更近 */
+  padding-bottom: 5px;
+  white-space: nowrap;
+}
+
+/* === 下方：大圖比較區塊 === */
+.slider-col {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* 單張縮圖樣式 */
+.thumb-item {
+  height: 60px;         /* ✅ 修改這裡：原本是 50px，數字越大圖片越大 */
+  width: auto;          /* 寬度會根據高度自動調整比例 */
+  
+  /* 以下保持不變 */
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 4px;
+  transition: all 0.2s;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.thumb-item:hover {
+  opacity: 1;
+}
+
+.thumb-item.active {
+  border-color: #3273dc;
+  opacity: 1;
+  box-shadow: 0 0 5px rgba(50, 115, 220, 0.5);
+}
+
+/* 文字標籤 (Input) */
+.thumb-col .comp-label {
+  text-align: left; /* 文字靠左 */
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-left: 2px;
+  margin-bottom: 2px;
+}
+
+/* 大圖容器 */
+.img-slider-container {
+  position: relative;
+  width: 100%;
+  /* ✅ 關鍵修改：使用 padding-bottom 撐開高度，比例設為跟影片一樣 (66% = 3:2左右) */
+  padding-bottom: 66%; 
+  height: 0 !important; /* 強制高度為 0，完全由 padding 控制 */
+  overflow: hidden;
+  border-radius: 8px;   /* 導圓角跟影片一致 */
+  background: transparent;
+  cursor: col-resize;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* 加一點陰影跟影片一致 */
+}
+
+/* 新增：底下的文字標籤樣式 */
+.comp-label {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 5px;
+}
+
+/* 圖片本體 */
+.img-comp-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* ✅ 改用 cover 填滿容器，確保沒有留白 */
+  user-select: none;
+  pointer-events: none;
+}
+
+.img-ours {
+  z-index: 2;
+  clip-path: inset(0 0 0 50%);
+}
+/* 滑動桿 */
+/* 滑動桿 */
+.img-slider-control {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: white;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.img-slider-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+
+.img-slider-handle::before { content: '⟨'; margin-right: 2px; }
+.img-slider-handle::after { content: '⟩'; margin-left: 2px; }
+
+
+
+
+
+/* === 專門針對 Outpainting 區塊將影片變高 === */
+.outpainting-scenes .video-wrapper {
+      padding-bottom: 66%; /* 這裡控制高度：100% 代表正方形，數值越大越瘦高 */
+    }
+/* RWD: 手機版讓縮圖變橫的在上面 */
+@media (max-width: 768px) {
+  .img-comp-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+  /* 左側縮圖列表區域 */
+  .thumb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    height: 300px; /* 固定高度，讓圖片列表可以滾動 */
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  .thumb-item {
+    width: 100%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: all 0.2s;
+    opacity: 0.7;
+  }
+  .img-slider-container {
+    width: 100%;
+    height: 250px; /* 手機版高度 */
+  }
+}
+
   </style>
 
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -624,7 +820,7 @@
                     <span class="icon">
                       <i class="fab fa-github"></i>
                     </span>
-                    <span>Code</span>
+                    <span>Code (Coming Soon)</span>
                   </a>
                 </span>
               </div>
@@ -694,7 +890,7 @@
             </div>
 
 
-                        <!-- Room 2 -->
+            <!-- Room 2 -->
             <div class="carousel-item">
               <div class="comparison-container" data-scene="room_2" data-section="teaser">
                 <div class="video-wrapper">
@@ -810,7 +1006,26 @@
                 </div>
               </div>
             </div>
+            
 
+            <!-- a29c -->
+            <div class="carousel-item">
+              <div class="comparison-container" data-scene="a29c" data-section="teaser">
+                <div class="video-wrapper">
+                  <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                    <source class="source-comparison" src="static/videos/Replica_6/room_1/3dgs.mp4" type="video/mp4">
+                  </video>
+                  <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                    <source class="source-ours" src="static/videos/Replica_6/room_1/ours.mp4" type="video/mp4">
+                  </video>
+                  <div class="slider-control">
+                    <div class="slider-handle"></div>
+                  </div>
+                  <div class="video-label label-left">3DGS</div>
+                  <div class="video-label label-right">Ours</div>
+                </div>
+              </div>
+            </div>
   
 
                        
@@ -851,18 +1066,41 @@
 <section class="section pipeline-section" style="padding: 40px 0;">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
-      <div class="column is-10">
+      
+      <div class="column is-12">
         <h2 class="title is-3" style="text-align: center; margin-bottom: 30px;">Pipeline</h2>
-        <div class="content has-text-justified" style="font-size: 14px; line-height: 1.6;">
-        <img src="static/images/pipeline.png" alt="pipeline" class="input-image">
-        <img src="static/images/Gamo.png" alt="Gamo" class="input-image gamo-large">
-
+        
+        <div class="content has-text-justified" style="font-size: 14px; line-height: 1.6; margin-bottom: 60px;">
+          <img src="static/images/pipeline.png" alt="pipeline" class="input-image" style="width: 100%; margin-bottom: 15px;">
+          <p>
+            <strong>Overview of Our Pipeline.</strong> Given sparse input views,
+            our method follows a three-stage process. (a) Coarse 3D Initialization:
+            We obtain geometry priors from initial 3D reconstruction,
+            including an opacity mask and coarse render that provide essential
+            structural cues. (b) GaMO: Geometry-aware Multi-view Outpainter:
+            Using the geometry priors, GaMO generates outpainted
+            views with enlarged FOV via a multi-view diffusion model. (c)
+            Refined Reconstruction: The outpainted views are used to refine
+            the 3D reconstruction, resulting in improved completeness and consistency.
+          </p>
         </div>
+
+        <div class="content has-text-justified" style="font-size: 14px; line-height: 1.6;">
+          <img src="static/images/Gamo.png" alt="Gamo" class="input-image" style="width: 100%; margin-bottom: 15px;">
+          <p>
+            <strong>Overview of GaMO (Geometry-aware Multi-view Diffusion Outpainter).</strong> (a) Multi-view Diffusion Conditioning: Sparse input
+            views are encoded into clean latents and combined with multi-view conditions, including Plücker ray embeddings for input views ($P_r$) and
+            the target view with enlarged FOV ($P^*_t$), along with original and augmented Canonical Coordinate Map (CCM) and RGB, to provide both
+            geometric and appearance cues for diffusion model conditioning. (b) Denoising Process: Coarse geometry priors (opacity mask and coarse
+            render) guide the denoising through mask latent blending performed at multiple timesteps ($t_1, t_2, ..., t_N$) with progressive dilation and noise
+            resampling, generating outpainted views with enlarged FOV (c).
+          </p>
+        </div>
+
       </div>
     </div>
   </div>
 </section>
-
 
   <!-- Section 1: Interactive Comparison -->
    <section class="section">
@@ -882,12 +1120,14 @@
           <button class="method-button" data-method="genfusion">GenFusion</button>
         </div>
 
-        <!-- 方法介紹區塊 -->
-        <div class="method-info" id="method-info-interactive">
-          <div class="method-info-title">3DGS : 3D Gaussian Splatting for Real-Time Radiance Field Rendering</div>
-          <div class="method-info-venue">SIGGRAPH 2023</div>
-        </div>
+      <div class="method-info" id="method-info-interactive">
+        <div class="method-info-title">3DGS : 3D Gaussian Splatting for Real-Time Radiance Field Rendering</div>
         
+        <div class="method-info-authors">Bernhard Kerbl*, Georgios Kopanas*, Thomas Leimkühler, George Drettakis (* indicates equal contribution)</div>
+        
+        <div class="method-info-venue">SIGGRAPH 2023</div>
+      </div>
+              
       <!-- ✅ 分隔線 & 6 views 標示 -->
       <div class="views-divider-wrapper">
         <div class="views-divider-line"></div>
@@ -1107,155 +1347,338 @@
     </div>
   </section>
 
-  <!-- Section 2: Outpainting Comparison -->
-   <section class="section">
-    <div style="width: 100%; padding: 0;">
-      <h2 class="section-title">Outpainting Comparison Using Multi-View Diffusion Models</h2>
-      
-      <!-- 方法選擇器 -->
-      <div class="method-selector" style="padding: 0 20px;">
-        <span style="font-weight: bold; margin-right: 10px; font-size: 16px;">Compare with:</span>
-        <button class="outpainting-button active" data-outpainting-method="mvgenmaster">MVGenMaster</button>
-        <button class="outpainting-button" data-outpainting-method="seva">SEVA</button>
-      </div>
-
-      <!-- 方法介紹區塊 -->
-      <div class="method-info" id="method-info-outpainting">
-        <div class="method-info-title">Scaling Multi-View Generation from Any Image via 3D Priors Enhanced Diffusion Model</div>
-        <div class="method-info-venue">CVPR 2025</div>
-      </div>
 
 
-      
-
-      <!-- MVGenMaster Scenes -->
-      <div class="outpainting-scenes active" id="mvgenmaster-scenes">
-        <!-- Scene 1 -->
-        <div class="scene-item">
-          <div class="scene-title">office_2</div>
-          <div class="comparison-container" data-scene="mvgen_room_0" data-section="outpainting">
-            <div class="video-wrapper">
-              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
-                <source class="source-comparison" src="static/videos/Replica_6_mvg/office_2/ours.mp4" type="video/mp4">
-              </video>
-              <video class="comparison-video video-ours" autoplay muted loop playsinline>
-                <source class="source-ours" src="static/videos/Replica_6/office_2/ours.mp4" type="video/mp4">
-              </video>
-              <div class="slider-control">
-                <div class="slider-handle"></div>
-              </div>
-              <div class="video-label label-left">MVGenMaster</div>
-              <div class="video-label label-right">Ours</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Scene 2 -->
-        <div class="scene-item">
-          <div class="scene-title">room 2</div>
-          <div class="comparison-container" data-scene="mvgen_room_1" data-section="outpainting">
-            <div class="video-wrapper">
-              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
-                <source class="source-comparison" src="static/videos/Replica_6_mvg/room_2/ours.mp4" type="video/mp4">
-              </video>
-              <video class="comparison-video video-ours" autoplay muted loop playsinline>
-                <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
-              </video>
-              <div class="slider-control">
-                <div class="slider-handle"></div>
-              </div>
-              <div class="video-label label-left">MVGenMaster</div>
-              <div class="video-label label-right">Ours</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Scene 3 -->
-        <div class="scene-item">
-          <div class="scene-title">94ee</div>
-          <div class="comparison-container" data-scene="mvgen_94ee" data-section="outpainting">
-            <div class="video-wrapper">
-              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
-                <source class="source-comparison" src="static/videos/Scannetpp_6_mvg/94ee/ours.mp4" type="video/mp4">
-              </video>
-              <video class="comparison-video video-ours" autoplay muted loop playsinline>
-                <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
-              </video>
-              <div class="slider-control">
-                <div class="slider-handle"></div>
-              </div>
-              <div class="video-label label-left">MVGenMaster</div>
-              <div class="video-label label-right">Ours</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SEVA Scenes -->
-      <div class="outpainting-scenes" id="seva-scenes">
-        <!-- Scene 1 -->
-        <div class="scene-item">
-          <div class="scene-title">office 2</div>
-          <div class="comparison-container" data-scene="seva_8a20" data-section="outpainting">
-            <div class="video-wrapper">
-              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
-                <source class="source-comparison" src="static/videos/Replica_6_seva/office_2/ours.mp4" type="video/mp4">
-              </video>
-              <video class="comparison-video video-ours" autoplay muted loop playsinline>
-                <source class="source-ours" src="static/videos/Replica_6/office_2/ours.mp4" type="video/mp4">
-              </video>
-              <div class="slider-control">
-                <div class="slider-handle"></div>
-              </div>
-              <div class="video-label label-left">SEVA</div>
-              <div class="video-label label-right">Ours</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Scene 2 -->
-        <div class="scene-item">
-          <div class="scene-title">room 2</div>
-          <div class="comparison-container" data-scene="seva_94ee" data-section="outpainting">
-            <div class="video-wrapper">
-              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
-                <source class="source-comparison" src="static/videos/Replica_6_seva/room_2/ours.mp4" type="video/mp4">
-              </video>
-              <video class="comparison-video video-ours" autoplay muted loop playsinline>
-                <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
-              </video>
-              <div class="slider-control">
-                <div class="slider-handle"></div>
-              </div>
-              <div class="video-label label-left">SEVA</div>
-              <div class="video-label label-right">Ours</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Scene 3 -->
-        <div class="scene-item">
-          <div class="scene-title">94ee</div>
-          <div class="comparison-container" data-scene="seva_a29c" data-section="outpainting">
-            <div class="video-wrapper">
-              <video class="comparison-video video-comparison" autoplay muted loop playsinline>
-                <source class="source-comparison" src="static/videos/Scannetpp_6_seva/94ee/ours.mp4" type="video/mp4">
-              </video>
-              <video class="comparison-video video-ours" autoplay muted loop playsinline>
-                <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
-              </video>
-              <div class="slider-control">
-                <div class="slider-handle"></div>
-              </div>
-              <div class="video-label label-left">SEVA</div>
-              <div class="video-label label-right">Ours</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+<section class="section">
+  <div style="width: 100%; padding: 0;">
+    <h2 class="section-title">Outpainting Comparison Using Multi-View Diffusion Models</h2>
+    
+    <div class="method-selector" style="padding: 0 20px;">
+      <span style="font-weight: bold; margin-right: 10px; font-size: 16px;">Compare with:</span>
+      <button class="outpainting-button active" data-outpainting-method="mvgenmaster">MVGenMaster</button>
+      <button class="outpainting-button" data-outpainting-method="seva">SEVA</button>
     </div>
-  </section>
+
+<div class="method-info" id="method-info-outpainting">
+      <div class="method-info-title">Scaling Multi-View Generation from Any Image via 3D Priors Enhanced Diffusion Model</div>
+      
+      <div class="method-info-authors">C. Cao, C. Yu, S. Liu, F. Wang, X. Xue, Y. Fu</div>
+      
+      <div class="method-info-venue">CVPR 2025</div>
+    </div>
+
+    <div class="outpainting-scenes active" id="mvgenmaster-scenes">
+      
+
+
+<div class="scene-item">
+        <div class="scene-title">office 2</div>
+  
+  <div class="img-comp-wrapper" data-scene-path="office_2" data-method="mvg">
+    
+    <div class="thumb-col">
+      <div class="comp-label">Input (select)</div>
+
+      <div class="thumb-list">
+        <img class="thumb-item active" src="static/images/outpaint/office_2/input/rgb_244.png" data-id="244">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_291.png" data-id="291">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_436.png" data-id="436">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_607.png" data-id="607">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_760.png" data-id="760">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_831.png" data-id="831">
+      </div>
+    </div>
+
+<div class="slider-col">
+    <div class="img-slider-container">
+        <img class="img-comp-img img-method" src="static/images/outpaint/office_2/mvg/rgb_244_b.png">
+        <img class="img-comp-img img-ours" src="static/images/outpaint/office_2/ours/rgb_244_b.png">
+        <div class="img-slider-control">
+            <div class="img-slider-handle"></div>
+        </div>
+        <div class="video-label label-left">MVGenMaster</div>
+        <div class="video-label label-right">Ours</div>
+        <div class="img-nav-button prev-btn">❮</div>
+        <div class="img-nav-button next-btn">❯</div>
+    </div>
+    
+    <div class="comp-label" style="margin-top: -2px; position: relative; z-index: 10;">Outpainted Views</div>
+</div>
+
+</div>
+<div class="comparison-container" data-scene="mvgen_room_0" data-section="outpainting">
+    <div class="video-wrapper">
+        <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+            <source class="source-comparison" src="static/videos/Replica_6_mvg/office_2/ours.mp4" type="video/mp4">
+        </video>
+        <video class="comparison-video video-ours" autoplay muted loop playsinline>
+            <source class="source-ours" src="static/videos/Replica_6/office_2/ours.mp4" type="video/mp4">
+        </video>
+        <div class="slider-control"><div class="slider-handle"></div></div>
+        <div class="video-label label-left">MVGenMaster</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+</div>
+<div class="comp-label">Refined Reconstruction</div>
+</div>
+
+
+<div class="scene-item">
+        <div class="scene-title">room 2</div>
+  
+  <div class="img-comp-wrapper" data-scene-path="room_2" data-method="mvg">
+    
+    <div class="thumb-col">
+      <div class="comp-label">Input (select)</div>
+
+      <div class="thumb-list">
+        <img class="thumb-item active" src="static/images/outpaint/room_2/input/rgb_61.png" data-id="61">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_178.png" data-id="178">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_323.png" data-id="323">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_485.png" data-id="485">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_526.png" data-id="526">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_758.png" data-id="758">
+      </div>
+    </div>
+
+<div class="slider-col">
+    <div class="img-slider-container">
+        <img class="img-comp-img img-method" src="static/images/outpaint/room_2/mvg/rgb_61_b.png">
+        <img class="img-comp-img img-ours" src="static/images/outpaint/room_2/ours/rgb_61_b.png">
+        <div class="img-slider-control">
+            <div class="img-slider-handle"></div>
+        </div>
+        <div class="video-label label-left">MVGenMaster</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+    
+    <div class="comp-label" style="margin-top: -2px; position: relative; z-index: 10;">Outpainted Views</div>
+</div>
+
+</div>
+<div class="comparison-container" data-scene="mvgen_room_0" data-section="outpainting">
+    <div class="video-wrapper">
+        <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+            <source class="source-comparison" src="static/videos/Replica_6_mvg/room_2/ours.mp4" type="video/mp4">
+        </video>
+        <video class="comparison-video video-ours" autoplay muted loop playsinline>
+            <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
+        </video>
+        <div class="slider-control"><div class="slider-handle"></div></div>
+        <div class="video-label label-left">MVGenMaster</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+</div>
+<div class="comp-label">Refined Reconstruction</div>
+</div>
+      
+<div class="scene-item">
+        <div class="scene-title">94ee</div>
+  
+  <div class="img-comp-wrapper" data-scene-path="94ee" data-method="mvg">
+    
+    <div class="thumb-col">
+      <div class="comp-label">Input (select)</div>
+
+      <div class="thumb-list">
+        <img class="thumb-item active" src="static/images/outpaint/94ee/input/DSC03057.png" data-id="DSC03057">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03107.png" data-id="DSC03107">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03177.png" data-id="DSC03177">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03184.png" data-id="DSC03184">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03274.png" data-id="DSC03274">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03302.png" data-id="DSC03302">
+      </div>
+    </div>
+
+<div class="slider-col">
+    <div class="img-slider-container">
+        <img class="img-comp-img img-method" src="static/images/outpaint/94ee/mvg/DSC03057_b.png">
+        <img class="img-comp-img img-ours" src="static/images/outpaint/94ee/ours/DSC03057_b.png">
+        <div class="img-slider-control">
+            <div class="img-slider-handle"></div>
+        </div>
+        <div class="video-label label-left">MVGenMaster</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+    
+    <div class="comp-label" style="margin-top: -2px; position: relative; z-index: 10;">Outpainted Views</div>
+</div>
+
+</div>
+<div class="comparison-container" data-scene="mvgen_94ee" data-section="outpainting">
+    <div class="video-wrapper">
+        <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+            <source class="source-comparison" src="static/videos/Scannetpp_6_mvg/94ee/ours.mp4" type="video/mp4">
+        </video>
+        <video class="comparison-video video-ours" autoplay muted loop playsinline>
+            <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
+        </video>
+        <div class="slider-control"><div class="slider-handle"></div></div>
+        <div class="video-label label-left">MVGenMaster</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+</div>
+<div class="comp-label">Refined Reconstruction</div>
+</div>
+
+
+</div>
+
+
+<div class="outpainting-scenes" id="seva-scenes">
+      
+     
+
+<div class="scene-item">
+        <div class="scene-title">office 2</div>
+  
+  <div class="img-comp-wrapper" data-scene-path="office_2" data-method="seva">
+    
+    <div class="thumb-col">
+      <div class="comp-label">Input (select)</div>
+
+      <div class="thumb-list">
+        <img class="thumb-item active" src="static/images/outpaint/office_2/input/rgb_244.png" data-id="244">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_291.png" data-id="291">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_436.png" data-id="436">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_607.png" data-id="607">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_760.png" data-id="760">
+        <img class="thumb-item" src="static/images/outpaint/office_2/input/rgb_831.png" data-id="831">
+      </div>
+    </div>
+
+<div class="slider-col">
+    <div class="img-slider-container">
+        <img class="img-comp-img img-method" src="static/images/outpaint/office_2/seva/rgb_244_b.png">
+        <img class="img-comp-img img-ours" src="static/images/outpaint/office_2/ours/rgb_244_b.png">
+        <div class="img-slider-control">
+            <div class="img-slider-handle"></div>
+        </div>
+        <div class="video-label label-left">SEVA</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+    
+    <div class="comp-label" style="margin-top: -2px; position: relative; z-index: 10;">Outpainted Views</div>
+</div>
+
+</div>
+<div class="comparison-container" data-scene="seva_room_0" data-section="outpainting">
+    <div class="video-wrapper">
+        <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+            <source class="source-comparison" src="static/videos/Replica_6_seva/office_2/ours.mp4" type="video/mp4">
+        </video>
+        <video class="comparison-video video-ours" autoplay muted loop playsinline>
+            <source class="source-ours" src="static/videos/Replica_6/office_2/ours.mp4" type="video/mp4">
+        </video>
+        <div class="slider-control"><div class="slider-handle"></div></div>
+        <div class="video-label label-left">SEVA</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+</div>
+<div class="comp-label">Refined Reconstruction</div>
+</div>
+
+
+<div class="scene-item">
+        <div class="scene-title">room 2</div>
+  
+  <div class="img-comp-wrapper" data-scene-path="room_2" data-method="seva">
+    
+    <div class="thumb-col">
+      <div class="comp-label">Input (select)</div>
+
+      <div class="thumb-list">
+        <img class="thumb-item active" src="static/images/outpaint/room_2/input/rgb_61.png" data-id="61">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_178.png" data-id="178">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_323.png" data-id="323">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_485.png" data-id="485">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_526.png" data-id="526">
+        <img class="thumb-item" src="static/images/outpaint/room_2/input/rgb_758.png" data-id="758">
+      </div>
+    </div>
+
+<div class="slider-col">
+    <div class="img-slider-container">
+        <img class="img-comp-img img-method" src="static/images/outpaint/room_2/seva/rgb_61_b.png">
+        <img class="img-comp-img img-ours" src="static/images/outpaint/room_2/ours/rgb_61_b.png">
+        <div class="img-slider-control">
+            <div class="img-slider-handle"></div>
+        </div>
+        <div class="video-label label-left">SEVA</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+    
+    <div class="comp-label" style="margin-top: -2px; position: relative; z-index: 10;">Outpainted Views</div>
+</div>
+
+</div>
+<div class="comparison-container" data-scene="deva_room_0" data-section="outpainting">
+    <div class="video-wrapper">
+        <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+            <source class="source-comparison" src="static/videos/Replica_6_seva/room_2/ours.mp4" type="video/mp4">
+        </video>
+        <video class="comparison-video video-ours" autoplay muted loop playsinline>
+            <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
+        </video>
+        <div class="slider-control"><div class="slider-handle"></div></div>
+        <div class="video-label label-left">SEVA</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+</div>
+<div class="comp-label">Refined Reconstruction</div>
+</div>
+      
+<div class="scene-item">
+        <div class="scene-title">94ee</div>
+  
+  <div class="img-comp-wrapper" data-scene-path="94ee" data-method="seva">
+    
+    <div class="thumb-col">
+      <div class="comp-label">Input (select)</div>
+
+      <div class="thumb-list">
+        <img class="thumb-item active" src="static/images/outpaint/94ee/input/DSC03057.png" data-id="DSC03057">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03107.png" data-id="DSC03107">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03177.png" data-id="DSC03177">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03184.png" data-id="DSC03184">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03274.png" data-id="DSC03274">
+        <img class="thumb-item" src="static/images/outpaint/94ee/input/DSC03302.png" data-id="DSC03302">
+      </div>
+    </div>
+
+<div class="slider-col">
+    <div class="img-slider-container">
+        <img class="img-comp-img img-method" src="static/images/outpaint/94ee/seva/DSC03057_b.png">
+        <img class="img-comp-img img-ours" src="static/images/outpaint/94ee/ours/DSC03057_b.png">
+        <div class="img-slider-control">
+            <div class="img-slider-handle"></div>
+        </div>
+        <div class="video-label label-left">SEVA</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+    
+    <div class="comp-label" style="margin-top: -2px; position: relative; z-index: 10;">Outpainted Views</div>
+</div>
+
+</div>
+<div class="comparison-container" data-scene="seva_94ee" data-section="outpainting">
+    <div class="video-wrapper">
+        <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+            <source class="source-comparison" src="static/videos/Scannetpp_6_seva/94ee/ours.mp4" type="video/mp4">
+        </video>
+        <video class="comparison-video video-ours" autoplay muted loop playsinline>
+            <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
+        </video>
+        <div class="slider-control"><div class="slider-handle"></div></div>
+        <div class="video-label label-left">SEVA</div>
+        <div class="video-label label-right">Ours</div>
+    </div>
+</div>
+<div class="comp-label">Refined Reconstruction</div>
+</div>
+</div>
+
+</section>
 
 <footer class="footer">
   <div class="container">
@@ -1330,9 +1753,11 @@
 
 
 
-  <script>
+<script>
   (function() {
-    // 資料結構：場景 -> 方法 -> 影片路徑
+    // ==========================================
+    // 1. 資料定義：場景與影片路徑
+    // ==========================================
     const videoData = {
       'a29c': {
         '3dgs': 'static/videos/Scannetpp_6/a29c/3dgs.mp4',
@@ -1388,7 +1813,7 @@
         'genfusion': 'static/videos/Replica_6/room_2/genfusion.mp4',
         'ours': 'static/videos/Replica_6/room_2/ours.mp4'
       },
-        // ===== 3 views scenes =====
+      // ===== 3 views scenes =====
       'office_2': {
         '3dgs': 'static/videos/Replica_3/office_2/3dgs.mp4',
         'fsgs': 'static/videos/Replica_3/office_2/fsgs.mp4',
@@ -1416,9 +1841,6 @@
         'genfusion': 'static/videos/Replica_3/office_4/genfusion.mp4',
         'ours': 'static/videos/Replica_3/office_4/ours.mp4'
       }
-
-
-
     };
 
     // 方法名稱對應
@@ -1431,54 +1853,88 @@
       'genfusion': 'GenFusion'
     };
 
-    // 方法詳細資訊
+// ==========================================
+    // 2. 詳細資訊定義：統一改為縮寫 (Abbreviations)
+    // ==========================================
     const methodInfo = {
       '3dgs': {
         title: '3DGS : 3D Gaussian Splatting for Real-Time Radiance Field Rendering',
+        authors: 'B. Kerbl*, G. Kopanas*, T. Leimkühler, G. Drettakis (* indicates equal contribution)',
         venue: 'SIGGRAPH 2023',
         venueClass: ''
       },
       'fsgs': {
         title: 'FSGS : Real-Time Few-Shot View Synthesis using Gaussian Splatting',
+        authors: 'Z. Zhu, Z. Fan, Y. Jiang, Z. Wang',
         venue: 'ECCV 2024',
         venueClass: ''
       },
       'instantsplat': {
         title: 'InstantSplat: Sparse-view Gaussian Splatting in Seconds',
+        authors: 'Z. Fan, W. Cong, K. Wen, K. Wang, J. Zhang, X. Ding, D. Xu, B. Ivanovic, M. Pavone, G. Pavlakos, Z. Wang, Y. Wang',
         venue: 'arXiv 2025',
         venueClass: ''
       },
       'difix3d': {
         title: 'Difix3D+ : Improving 3D Reconstructions with Single-Step Diffusion Models',
+        authors: 'J. Z. Wu, Y. Zhang, H. Turki, X. Ren, J. Gao, M. Z. Shou, S. Fidler, Z. Gojcic, H. Ling',
         venue: 'CVPR 2025 Oral, Best Paper Candidate',
         venueClass: 'best-paper'
       },
       'guidedvd': {
         title: 'Taming Video Diffusion Prior with Scene-Grounding Guidance for 3D Gaussian Splatting from Sparse Inputs',
+        authors: 'Y. Zhong, Z. Li, D. Z. Chen, L. Hong, D. Xu',
         venue: 'CVPR 2025 Highlight',
         venueClass: 'highlight'
       },
       'genfusion': {
-        title: 'GenFusion: Closing the Loop between Reconstruction and Generation via Videos.',
-        venue: 'CVPR 2025 Highlight',
-        venueClass: 'highlight'
+        title: 'GenFusion: Closing the Loop between Reconstruction and Generation via Videos',
+        authors: 'S. Wu, C. Xu, B. Huang, A. Geiger, A. Chen',
+        venue: 'CVPR 2025',
+        venueClass: ''
       }
     };
 
-// Outpainting 方法資訊
+    // ==========================================
+    // 更新這部分：Outpainting 方法資訊 (加入縮寫作者)
+    // ==========================================
     const outpaintingMethodInfo = {
       'mvgenmaster': {
         title: 'Scaling Multi-View Generation from Any Image via 3D Priors Enhanced Diffusion Model',
+        authors: 'C. Cao, C. Yu, S. Liu, F. Wang, X. Xue, Y. Fu',
         venue: 'CVPR 2025',
         venueClass: ''
       },
-    'seva': {
-      title: 'Stable Virtual Camera: Generative View Synthesis with Diffusion Models',
-      venue: 'arXiv 2025',
-      venueClass: ''
-    }
-
+      'seva': {
+        title: 'Stable Virtual Camera: Generative View Synthesis with Diffusion Models',
+        authors: 'J. Zhou, H. Gao, V. Voleti, A. Vasishta, C.-H. Yao, M. Boss, P. Torr, C. Rupprecht, V. Jampani',
+        venue: 'arXiv 2025',
+        venueClass: ''
+      }
     };
+
+    // ==========================================
+    // 更新函式：Outpainting 切換時也要更新作者
+    // ==========================================
+    function updateOutpaintingMethodInfo(method) {
+      const info = outpaintingMethodInfo[method];
+      const infoBlock = document.getElementById('method-info-outpainting');
+      const titleElement = infoBlock.querySelector('.method-info-title');
+      const venueElement = infoBlock.querySelector('.method-info-venue');
+      
+      // ✅ 檢查是否有作者欄位，沒有就建立 (跟上面 Interactive 的邏輯一樣)
+      let authorsElement = infoBlock.querySelector('.method-info-authors');
+      if (!authorsElement) {
+          authorsElement = document.createElement('div');
+          authorsElement.className = 'method-info-authors';
+          titleElement.after(authorsElement);
+      }
+      
+      titleElement.textContent = info.title;
+      authorsElement.textContent = info.authors; // ✅ 更新作者
+      venueElement.innerHTML = info.venue;
+      venueElement.className = 'method-info-venue ' + info.venueClass;
+    }
 
     // 當前選擇的方法
     let currentMethod = '3dgs';
@@ -1486,13 +1942,20 @@
     // 獲取所有比較容器
     const containers = document.querySelectorAll('.comparison-container');
 
-    // 為每個場景初始化滑桿
+    // ==========================================
+    // 3. 初始化影片比較器與滑動功能 (保留原本邏輯)
+    // ==========================================
     containers.forEach(container => {
       const scene = container.dataset.scene;
+      // 注意：這裡只對有 scene 的容器初始化，避免與 Outpainting 邏輯衝突
+      // 如果你的 outpainting 容器也有 data-scene 且需要同樣邏輯，保持原樣即可
       const slider = container.querySelector('.slider-control');
       const videoComparison = container.querySelector('.video-comparison');
       const videoOurs = container.querySelector('.video-ours');
       
+      // 若容器結構不同（例如 teaser 輪播），querySelector 可能找不到元素，做個防呆
+      if (!slider || !videoComparison || !videoOurs) return;
+
       let isDragging = false;
       let isSyncing = false;
 
@@ -1505,12 +1968,10 @@
         videoOurs.style.clipPath = `inset(0 0 0 ${position}%)`;
       }
 
-      // 滑鼠事件：滑過整個比較區塊就會移動滑軌
-    container.addEventListener('mousemove', (e) => {
-      // 只要滑鼠在這個 container 上，就更新位置
-      updateSliderPosition(e.clientX);
-    });
-      // 觸控事件
+      container.addEventListener('mousemove', (e) => {
+        updateSliderPosition(e.clientX);
+      });
+
       slider.addEventListener('touchstart', (e) => {
         isDragging = true;
         e.preventDefault();
@@ -1526,31 +1987,21 @@
         isDragging = false;
       });
 
-      // 持續同步影片時間 - 使用 requestAnimationFrame 提供更高頻率的同步
       function syncVideos() {
         if (!isSyncing) {
           const timeDiff = Math.abs(videoComparison.currentTime - videoOurs.currentTime);
-          
-          // 如果時間差超過 0.05 秒（減少閾值以提高同步精度），立即同步
           if (timeDiff > 0.05) {
             isSyncing = true;
-            
-            // 使用播放速度較快的影片作為基準
             const targetTime = Math.max(videoComparison.currentTime, videoOurs.currentTime);
             videoComparison.currentTime = targetTime;
             videoOurs.currentTime = targetTime;
-            
             setTimeout(() => { isSyncing = false; }, 30);
           }
         }
-        
         requestAnimationFrame(syncVideos);
       }
-      
-      // 開始持續同步循環
       syncVideos();
 
-      // 當影片載入完成時，確保從零開始同步
       videoComparison.addEventListener('loadeddata', () => {
         videoComparison.currentTime = 0;
         videoOurs.currentTime = 0;
@@ -1563,6 +2014,10 @@
       });
     });
 
+    // ==========================================
+    // 4. 更新函式：讓切換時也能更新作者 (關鍵修改)
+    // ==========================================
+    
     // 更新互動比較區段的影片
     function updateInteractiveVideos() {
       const interactiveContainers = document.querySelectorAll('[data-section="interactive"]');
@@ -1575,37 +2030,51 @@
         const videoOurs = container.querySelector('.video-ours');
         const methodLabel = container.querySelector('.method-label');
 
-        // 更新影片來源
-        sourceComparison.src = videoData[scene][currentMethod];
-        sourceOurs.src = videoData[scene]['ours'];
+        if(videoData[scene] && videoData[scene][currentMethod]) {
+            // 更新影片來源
+            sourceComparison.src = videoData[scene][currentMethod];
+            sourceOurs.src = videoData[scene]['ours'];
 
-        // 重新載入並播放
-        videoComparison.load();
-        videoOurs.load();
-        videoComparison.play();
-        videoOurs.play();
+            // 重新載入並播放
+            videoComparison.load();
+            videoOurs.load();
+            // 嘗試播放，並捕捉錯誤 (避免某些瀏覽器報錯)
+            videoComparison.play().catch(e => {});
+            videoOurs.play().catch(e => {});
 
-        // 更新標籤
-        methodLabel.textContent = methodNames[currentMethod];
+            // 更新標籤
+            methodLabel.textContent = methodNames[currentMethod];
+        }
       });
 
-      // 更新方法介紹
+      // 同步更新下方的介紹資訊 (包含作者)
       updateMethodInfo(currentMethod);
     }
 
-    // 更新方法介紹資訊
+    // 更新方法介紹資訊 (包含作者的防呆與更新)
     function updateMethodInfo(method) {
       const info = methodInfo[method];
       const infoBlock = document.getElementById('method-info-interactive');
+      
       const titleElement = infoBlock.querySelector('.method-info-title');
       const venueElement = infoBlock.querySelector('.method-info-venue');
       
+      // ✅ 檢查是否有作者欄位，沒有就建立
+      let authorsElement = infoBlock.querySelector('.method-info-authors');
+      if (!authorsElement) {
+          authorsElement = document.createElement('div');
+          authorsElement.className = 'method-info-authors';
+          titleElement.after(authorsElement);
+      }
+      
+      // ✅ 更新內容
       titleElement.textContent = info.title;
+      authorsElement.textContent = info.authors; // 更新作者
       venueElement.innerHTML = info.venue;
       venueElement.className = 'method-info-venue ' + info.venueClass;
     }
 
-    // 更新 Outpainting 方法介紹資訊
+    // 更新 Outpainting 方法介紹資訊 (這部分沒變)
     function updateOutpaintingMethodInfo(method) {
       const info = outpaintingMethodInfo[method];
       const infoBlock = document.getElementById('method-info-outpainting');
@@ -1617,7 +2086,11 @@
       venueElement.className = 'method-info-venue ' + info.venueClass;
     }
 
-    // 方法切換（僅影響互動比較區段）
+    // ==========================================
+    // 5. 事件監聽
+    // ==========================================
+
+    // 方法切換（互動比較區段）
     document.querySelectorAll('.method-button').forEach(button => {
       button.addEventListener('click', () => {
         document.querySelectorAll('.method-button').forEach(b => b.classList.remove('active'));
@@ -1627,7 +2100,7 @@
       });
     });
 
-    // Outpainting 方法切換
+    // Outpainting 方法切換 (保留你原本的邏輯)
     document.querySelectorAll('.outpainting-button').forEach(button => {
       button.addEventListener('click', () => {
         // 更新按鈕狀態
@@ -1657,74 +2130,12 @@
       });
     });
 
+    // ✅ 初始化：一開始就執行一次更新，確保作者資訊出現
+    updateInteractiveVideos();
+
     console.log('[Comparison Grid] Initialized with', containers.length, 'comparison containers');
   })();
   </script>
-  <script>
-  let currentSlide = 0;
-  let itemsPerView = window.innerWidth <= 768 ? 1 : 4;
-  const track = document.getElementById('carouselTrack');
-  const items = document.querySelectorAll('.carousel-item');
-  let totalSlides = Math.ceil(items.length / itemsPerView);
-
-  // 初始化指示圓點
-  function initDots() {
-    const dotsContainer = document.getElementById('carouselDots');
-    dotsContainer.innerHTML = '';  // 先清空，避免重複疊加
-
-    for (let i = 0; i < totalSlides; i++) {
-      const dot = document.createElement('button');
-      dot.className = 'carousel-dot' + (i === currentSlide ? ' active' : '');
-      dot.onclick = () => goToSlide(i);
-      dotsContainer.appendChild(dot);
-    }
-  }
-
-  // 移動輪播（左右箭頭用）
-  function moveCarousel(direction) {
-    currentSlide += direction;
-    if (currentSlide < 0) currentSlide = totalSlides - 1;
-    if (currentSlide >= totalSlides) currentSlide = 0;
-    updateCarousel();
-  }
-
-  // 跳到指定頁（圓點用）
-  function goToSlide(slideIndex) {
-    currentSlide = slideIndex;
-    updateCarousel();
-  }
-
-  // 更新輪播位置
-  function updateCarousel() {
-    // 每一頁直接視為 100% 寬度
-    const offset = currentSlide * 100;
-    track.style.transform = `translateX(-${offset}%)`;
-    
-    const dots = document.querySelectorAll('.carousel-dot');
-    dots.forEach((dot, index) => {
-      dot.classList.toggle('active', index === currentSlide);
-    });
-  }
-
-  // 視窗縮放時更新 itemsPerView（桌機 4 個 / 手機 1 個）
-  function onResize() {
-    const newItemsPerView = window.innerWidth <= 768 ? 1 : 4;
-    if (newItemsPerView !== itemsPerView) {
-      itemsPerView = newItemsPerView;
-      totalSlides = Math.ceil(items.length / itemsPerView);
-      currentSlide = 0;
-      initDots();
-      updateCarousel();
-    }
-  }
-
-  window.addEventListener('resize', onResize);
-
-  // 初始化
-  initDots();
-  updateCarousel();
-</script>
-
 
 </body>
 </html>
