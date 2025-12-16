@@ -1698,8 +1698,8 @@
               In <em>European Conference on Computer Vision (ECCV)</em>, 2024.
             </li>
             <li>
-              Fan, Z., Cong, W., Wen, K., Wang, K., Zhang, J., Ding, X., Xu, D., Ivanovic, B., Pavone, M., Pavlakos, G., <em>et al.</em>
-              "InstantSplat: Unbounded Sparse-View Pose-Free Gaussian Splatting in 40 Seconds."
+              Fan, Z., Cong, W., Wen, K., Wang, K., Zhang, J., Ding, X., Xu, D., Ivanovic, B., Pavone, M., Pavlakos, G., Wang, Z., and Wang, Y.
+              "InstantSplat: Sparse-view Gaussian Splatting in Seconds."
               <em>arXiv preprint arXiv:2403.20309</em>, 2024.
             </li>
             <li>
@@ -1714,7 +1714,7 @@
             </li>
             <li>
               Cao, C., Yu, C., Liu, S., Wang, F., Xue, X., and Fu, Y.
-              "MVGenMaster: Scaling Multi-View Generation from Any Image via 3D Priors Enhanced Diffusion Model."
+              "Scaling Multi-View Generation from Any Image via 3D Priors Enhanced Diffusion Model."
               In <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2025.
             </li>
             <li>
@@ -1722,8 +1722,6 @@
               "Stable Virtual Camera: Generative View Synthesis with Diffusion Models."
               <em>arXiv preprint arXiv:2503.14489</em>, 2025.
             </li>
-
-            <!-- ====================== 新增的兩筆 ====================== -->
 
             <li>
               Straub, J., Whelan, T., Ma, L., Chen, Y., Wijmans, E., Green, S., Engel, J., Mur-Artal, R., Ren, C., Verma, S., <em>et al.</em>
@@ -1742,8 +1740,6 @@
               "GenFusion: Closing the Loop between Reconstruction and Generation via Videos."
               In <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>, 2025.
             </li>
-
-
           </ol>
         </div>
       </div>
@@ -2136,6 +2132,82 @@
     console.log('[Comparison Grid] Initialized with', containers.length, 'comparison containers');
   })();
   </script>
+  <script>
+  // ==========================================
+  // Teaser 輪播控制邏輯 (被誤刪的部分)
+  // ==========================================
+  let currentSlide = 0;
+  let itemsPerView = window.innerWidth <= 768 ? 1 : 3; // 手機顯示1個，電腦顯示3個
+  const track = document.getElementById('carouselTrack');
+  const items = document.querySelectorAll('.carousel-item');
+  
+  // 計算總頁數
+  let totalSlides = Math.ceil(items.length / itemsPerView);
+
+  // 初始化指示圓點
+  function initDots() {
+    const dotsContainer = document.getElementById('carouselDots');
+    if (!dotsContainer) return;
+    
+    dotsContainer.innerHTML = '';  // 先清空
+
+    for (let i = 0; i < totalSlides; i++) {
+      const dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === currentSlide ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  // 移動輪播（左右箭頭用）
+  function moveCarousel(direction) {
+    currentSlide += direction;
+    // 循環播放邏輯
+    if (currentSlide < 0) currentSlide = totalSlides - 1;
+    if (currentSlide >= totalSlides) currentSlide = 0;
+    updateCarousel();
+  }
+
+  // 跳到指定頁（圓點用）
+  function goToSlide(slideIndex) {
+    currentSlide = slideIndex;
+    updateCarousel();
+  }
+
+  // 更新輪播位置
+  function updateCarousel() {
+    if (!track) return;
+    // 每一頁移動 100% 寬度
+    const offset = currentSlide * 100;
+    track.style.transform = `translateX(-${offset}%)`;
+    
+    // 更新圓點狀態
+    const dots = document.querySelectorAll('.carousel-dot');
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentSlide);
+    });
+  }
+
+  // 視窗縮放時更新 (RWD)
+  function onResize() {
+    const newItemsPerView = window.innerWidth <= 768 ? 1 : 3; // 這邊要跟上面一致 (3)
+    if (newItemsPerView !== itemsPerView) {
+      itemsPerView = newItemsPerView;
+      totalSlides = Math.ceil(items.length / itemsPerView);
+      currentSlide = 0; // 重置到第一頁以免跑版
+      initDots();
+      updateCarousel();
+    }
+  }
+
+  window.addEventListener('resize', onResize);
+
+  // 啟動初始化
+  if (items.length > 0) {
+      initDots();
+      updateCarousel();
+  }
+</script>
 
 </body>
 </html>
