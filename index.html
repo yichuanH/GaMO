@@ -316,6 +316,98 @@
       }
     }
 
+
+
+/* =========================================
+   1. 這是全域設定 (電腦、手機都以此為基礎)
+   請把這段 dataset 樣式放在 @media 之外！
+   ========================================= */
+
+/* 每一列資料集的 Flex 容器 */
+.dataset-row {
+  display: flex;
+  align-items: center; /* 垂直置中 */
+  justify-content: center;
+  width: 95%;          
+  max-width: 1400px;
+  margin: 0 auto 30px; 
+}
+
+/* 左側垂直紅字標籤 */
+.dataset-label {
+  writing-mode: vertical-rl; /* 關鍵：垂直排列 */
+  transform: rotate(180deg); /* 關鍵：轉向 */
+  
+  font-size: 14px;
+  font-weight: 800;
+  color: #585858;
+  margin-right: 15px;
+  margin-top: 80px;
+  white-space: nowrap;
+  letter-spacing: 2px;
+  font-family: "Google Sans", sans-serif;
+  flex-shrink: 0;
+}
+
+/* 修正：讓內部的 Grid 在 Flex 容器內佔滿 */
+.dataset-row .scenes-grid {
+  flex: 1;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* =========================================
+   2. 這是 RWD 手機版設定 (螢幕 < 768px 時覆寫)
+   ========================================= */
+@media (max-width: 768px) {
+  .img-comp-wrapper {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .thumb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+  }
+
+  .thumb-item {
+    width: 100%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: all 0.2s;
+    opacity: 0.7;
+  }
+  
+  .img-slider-container {
+    width: 100%;
+    height: 250px;
+  }
+
+  /* 手機版：把左邊的紅字變成橫的放在上面 */
+  .dataset-row {
+    flex-direction: column;
+  }
+  
+  .dataset-label {
+    writing-mode: horizontal-tb; /* 變回橫書 */
+    transform: none;             /* 取消旋轉 */
+    margin-right: 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #5d5d5d;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
     /* 響應式設計 - 手機 */
     @media (max-width: 768px) {
       .scenes-grid, .outpainting-scenes.active {
@@ -585,6 +677,17 @@
   gap: 5px;
 }
 
+/* 資料集名稱的小標題 */
+.dataset-header {
+  text-align: center;
+  font-size: 20px;       /* 字體大小 */
+  font-weight: bold;     /* 粗體 */
+  color: #888;           /* 灰色，不要太搶眼 */
+  margin-top: 10px;      /* 距離上方分隔線 */
+  margin-bottom: 15px;   /* 距離下方圖片 */
+  letter-spacing: 1px;   /* 字距稍微寬一點 */
+}
+
 
 /* 縮圖列表 (水平捲動) */
 .thumb-list {
@@ -751,6 +854,33 @@
     width: 100%;
     height: 250px; /* 手機版高度 */
   }
+  /* === 每一列資料集的 Flex 容器 === */
+.dataset-row {
+  display: flex;
+  align-items: center; /* 垂直置中 */
+  justify-content: center;
+  width: 95%;          /* 寬度設寬一點，容納左邊的字 */
+  max-width: 1400px;
+  margin: 0 auto 30px; /* 置中並保持下方距離 */
+}
+
+/* (選用) 手機版調整：螢幕太小時把字變橫的放在上面，以免圖片太擠 */
+@media (max-width: 768px) {
+  .dataset-row {
+    flex-direction: column; /* 改成上下排列 */
+  }
+  .dataset-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+    margin-right: 0;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #686868;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+
 }
 
   </style>
@@ -1128,17 +1258,16 @@
         <div class="method-info-venue">SIGGRAPH 2023</div>
       </div>
               
-      <!-- ✅ 分隔線 & 6 views 標示 -->
       <div class="views-divider-wrapper">
         <div class="views-divider-line"></div>
         <div class="views-divider-label">Input 6 views</div>
         <div class="views-divider-line"></div>
       </div>
 
-
-        <!-- 場景網格 -->
+      <div class="dataset-row">
+        <div class="dataset-label">Replica</div>
+        
         <div class="scenes-grid">
-          <!-- Room 0 -->
           <div class="scene-item">
             <div class="scene-title">room 0</div>
             <img src="static/images/room_0.png" alt="room 0 input" class="input-image">
@@ -1150,16 +1279,13 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Replica_6/room_0/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
 
-          <!-- Room 1 -->
           <div class="scene-item">
             <div class="scene-title">room 1</div>
             <img src="static/images/room_1.png" alt="room 1 input" class="input-image">
@@ -1171,16 +1297,13 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Replica_6/room_1/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
 
-          <!-- Room 2 -->
           <div class="scene-item">
             <div class="scene-title">room 2</div>
             <img src="static/images/room_2.png" alt="room 2 input" class="input-image">
@@ -1192,16 +1315,16 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Replica_6/room_2/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
-          
-          <!-- 8a20 -->
+        </div> </div> <div class="dataset-row">
+        <div class="dataset-label">ScanNet++</div>
+
+        <div class="scenes-grid">
           <div class="scene-item">
             <div class="scene-title">8a20</div>
             <img src="static/images/8a20.png" alt="8a20 input" class="input-image">
@@ -1213,16 +1336,13 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Scannetpp_6/8a20/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
 
-          <!-- 94ee -->
           <div class="scene-item">
             <div class="scene-title">94ee</div>
             <img src="static/images/94ee.png" alt="94ee input" class="input-image">
@@ -1234,16 +1354,13 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Scannetpp_6/94ee/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
 
-          <!-- a29c -->
           <div class="scene-item">
             <div class="scene-title">a29c</div>
             <img src="static/images/a29c.png" alt="a29c input" class="input-image">
@@ -1255,28 +1372,22 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Scannetpp_6/a29c/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
-          </div>
+        </div> </div> <div class="views-divider-wrapper">
+        <div class="views-divider-line"></div>
+        <div class="views-divider-label">Input 3 views</div>
+        <div class="views-divider-line"></div>
+      </div>
 
-
-
-        <!-- ✅ 分隔線 & 3 views 標示 -->
-        <div class="views-divider-wrapper">
-          <div class="views-divider-line"></div>
-          <div class="views-divider-label">Input 3 views</div>
-          <div class="views-divider-line"></div>
-        </div>
+      <div class="dataset-row">
+        <div class="dataset-label">Replica</div>
 
         <div class="scenes-grid scenes-grid-3views">
-
-          <!-- 8a20 -->
           <div class="scene-item">
             <div class="scene-title">office 2</div>
             <img src="static/images/office_2.png" alt="office_2 input" class="input-image">
@@ -1288,16 +1399,13 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Replica_3/office_2/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
 
-          <!-- 94ee -->
           <div class="scene-item">
             <div class="scene-title">office 3</div>
             <img src="static/images/office_3.png" alt="office_3 input" class="input-image">
@@ -1309,18 +1417,15 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Replica_3/office_3/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
 
-          <!-- a29c -->
           <div class="scene-item">
-            <div class="scene-title">office_4</div>
+            <div class="scene-title">office 4</div>
             <img src="static/images/office_4.png" alt="office 4 input" class="input-image">
             <div class="comparison-container" data-scene="office_4" data-section="interactive">
               <div class="video-wrapper">
@@ -1330,19 +1435,15 @@
                 <video class="comparison-video video-ours" autoplay muted loop playsinline>
                   <source class="source-ours" src="static/videos/Replica_3/office_4/ours.mp4" type="video/mp4">
                 </video>
-                <div class="slider-control">
-                  <div class="slider-handle"></div>
-                </div>
+                <div class="slider-control"><div class="slider-handle"></div></div>
                 <div class="video-label label-left method-label">3DGS</div>
                 <div class="video-label label-right">Ours</div>
               </div>
             </div>
           </div>
-        </div> <!-- end scenes-grid -->
+        </div>
+      </div>
     
-
-
-        
       </div>
     </div>
   </section>
