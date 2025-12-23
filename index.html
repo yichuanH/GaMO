@@ -712,7 +712,7 @@
 
 /* 單張縮圖樣式 */
 .thumb-item {
-  height: 60px;         /* ✅ 修改這裡：原本是 50px，數字越大圖片越大 */
+  height: 45px;         /* ✅ 修改這裡：原本是 50px，數字越大圖片越大 */
   width: auto;          /* 寬度會根據高度自動調整比例 */
   
   /* 以下保持不變 */
@@ -817,14 +817,38 @@
 .img-slider-handle::before { content: '⟨'; margin-right: 2px; }
 .img-slider-handle::after { content: '⟩'; margin-left: 2px; }
 
-
-
-
-
 /* === 專門針對 Outpainting 區塊將影片變高 === */
 .outpainting-scenes .video-wrapper {
       padding-bottom: 66%; /* 這裡控制高度：100% 代表正方形，數值越大越瘦高 */
     }
+
+
+/* 圖片總容器 */
+.outpaint-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 一排 3 張，可改 4 */
+  gap: 8px;
+  width: 100%;
+}
+
+/* 單張 outpaint 圖 */
+.outpaint-grid img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+
+/* 手機版 */
+@media (max-width: 768px) {
+  .outpaint-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+
 /* RWD: 手機版讓縮圖變橫的在上面 */
 @media (max-width: 768px) {
   .img-comp-wrapper {
@@ -1218,14 +1242,20 @@
         <div class="content has-text-justified" style="font-size: 14px; line-height: 1.6;">
           <img src="static/images/Gamo.png" alt="Gamo" class="input-image" style="width: 100%; margin-bottom: 15px;">
           <p>
-            <strong>Overview of GaMO (Geometry-aware Multi-view Diffusion Outpainter).</strong> (a) Multi-view Diffusion Conditioning: Sparse input
-            views are encoded into clean latents and combined with multi-view conditions, including Plücker ray embeddings for input views ($P_r$) and
-            the target view with enlarged FOV ($P^*_t$), along with original and augmented Canonical Coordinate Map (CCM) and RGB, to provide both
-            geometric and appearance cues for diffusion model conditioning. (b) Denoising Process: Coarse geometry priors (opacity mask and coarse
-            render) guide the denoising through mask latent blending performed at multiple timesteps ($t_1, t_2, ..., t_N$) with progressive dilation and noise
-            resampling, generating outpainted views with enlarged FOV (c).
+            <strong>Overview of GaMO (Geometry-aware Multi-view Diffusion Outpainter).</strong>
+            (a) <strong>Multi-view Diffusion Conditioning:</strong> Sparse input views are encoded
+            into clean latents and combined with multi-view conditions, including Plücker ray
+            embeddings for input views (<em>P<sub>r</sub></em>) and the target view with enlarged FOV
+            (<em>P<sup>*</sup><sub>t</sub></em>), together with original and augmented Canonical
+            Coordinate Map (CCM) and RGB, providing both geometric and appearance cues for
+            diffusion model conditioning.
+            (b) <strong>Denoising Process:</strong> Coarse geometry priors (opacity mask and coarse
+            render) guide the denoising through mask latent blending performed at multiple
+            timesteps (<em>t<sub>1</sub>, t<sub>2</sub>, …, t<sub>N</sub></em>) with progressive dilation
+            and noise resampling, generating outpainted views with enlarged FOV (c).
           </p>
         </div>
+
 
       </div>
     </div>
@@ -1781,6 +1811,92 @@
 
 </section>
 
+  <!-- Section 4: MipNeRF360 -->
+<section class="section">
+    <div style="width: 100%; padding: 0;">
+      <div style="width: 100%; padding: 0;">
+
+        <h2 class="section-title">Mip-NeRF 360 Outdoor + Indoor Comparison</h2>
+
+        <!-- 方法選擇器 -->
+        <div class="method-selector" style="padding: 0 20px;">
+          <span style="font-weight: bold; margin-right: 10px; font-size: 16px;">Compare with:</span>
+          <button class="method-button active" data-method="3dgs">3DGS</button>
+          <button class="method-button" data-method="guidedvd">GuidedVD-3DGS</button>
+          <button class="method-button" data-method="genfusion">GenFusion</button>
+        </div>
+
+
+      
+
+      <div class="dataset-row">
+        <div class="dataset-label">Mip-NeRF 360</div>
+
+        <div class="scenes-grid scenes-grid-6views">
+          <div class="scene-item">
+            <div class="scene-title">bicycle</div>
+            <img src="static/images/bicycle.png" alt="bicycle input" class="input-image">
+            <div class="comparison-container" data-scene="bicycle" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/MipNeRF360/bicycle/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/MipNeRF360/bicycle/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control"><div class="slider-handle"></div></div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene-item">
+            <div class="scene-title">garden</div>
+            <img src="static/images/garden.png" alt="garden input" class="input-image">
+            <div class="comparison-container" data-scene="garden" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/MipNeRF360/garden/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/MipNeRF360/garden/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control"><div class="slider-handle"></div></div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene-item">
+            <div class="scene-title">room</div>
+            <img src="static/images/room.png" alt="room input" class="input-image">
+            <div class="comparison-container" data-scene="room" data-section="interactive">
+              <div class="video-wrapper">
+                <video class="comparison-video video-comparison" autoplay muted loop playsinline>
+                  <source class="source-comparison" src="static/videos/MipNeRF360/room/3dgs.mp4" type="video/mp4">
+                </video>
+                <video class="comparison-video video-ours" autoplay muted loop playsinline>
+                  <source class="source-ours" src="static/videos/MipNeRF360/room/ours.mp4" type="video/mp4">
+                </video>
+                <div class="slider-control"><div class="slider-handle"></div></div>
+                <div class="video-label label-left method-label">3DGS</div>
+                <div class="video-label label-right">Ours</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      </div>
+    </div>
+  </section>
+
+
+
+
+
 <footer class="footer">
   <div class="container">
     <div class="columns is-centered">
@@ -1937,7 +2053,29 @@
         'guidedvd': 'static/videos/Replica_3/office_4/guidedvd.mp4',
         'genfusion': 'static/videos/Replica_3/office_4/genfusion.mp4',
         'ours': 'static/videos/Replica_3/office_4/ours.mp4'
+      },
+      'bicycle': {
+        '3dgs': 'static/videos/MipNeRF360/bicycle/3dgs.mp4',
+        'fsgs': 'static/videos/MipNeRF360/bicycle/fsgs.mp4',
+        'guidedvd': 'static/videos/MipNeRF360/bicycle/guidedvd.mp4',
+        'genfusion': 'static/videos/MipNeRF360/bicycle/genfusion.mp4',
+        'ours': 'static/videos/MipNeRF360/bicycle/ours.mp4'
+      },
+      'garden': {
+        '3dgs': 'static/videos/MipNeRF360/garden/3dgs.mp4',
+        'fsgs': 'static/videos/MipNeRF360/garden/fsgs.mp4',
+        'guidedvd': 'static/videos/MipNeRF360/garden/guidedvd.mp4',
+        'genfusion': 'static/videos/MipNeRF360/garden/genfusion.mp4',
+        'ours': 'static/videos/MipNeRF360/garden/ours.mp4'
+      },
+      'room': {
+        '3dgs': 'static/videos/MipNeRF360/room/3dgs.mp4',
+        'fsgs': 'static/videos/MipNeRF360/room/fsgs.mp4',
+        'guidedvd': 'static/videos/MipNeRF360/room/guidedvd.mp4',
+        'genfusion': 'static/videos/MipNeRF360/room/genfusion.mp4',
+        'ours': 'static/videos/MipNeRF360/room/ours.mp4'
       }
+      
     };
 
     // 方法名稱對應
