@@ -840,6 +840,64 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
+
+
+/* ===============================
+   Outpaint compare: input overlay
+   =============================== */
+.img-slider-container { position: relative; }
+
+/* 確保 Wrap 本身沒有尺寸，只是一個定位點 */
+/* 容器改為絕對定位並填滿父層 */
+.img-slider-container .input-overlay-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+  display: block; /* 取消 flex，改用裡面的圖片填滿 */
+}
+
+
+
+
+.img-slider-container .input-overlay {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 確保邊框不會增加總寬度 */
+  box-sizing: border-box; 
+  transform: scale(0.605);
+  border: 3px solid #fff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  border-radius: 6px;
+  display: block;
+}
+
+/* toggle 按鈕：左下角 */
+.img-slider-container .overlay-toggle{
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 30;
+
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.8);
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  cursor: pointer;
+}
+
+/* 關閉狀態 */
+.img-slider-container.overlay-off .input-overlay{
+  display: none;
+}
+
+
 /* 手機版 */
 @media (max-width: 768px) {
   .outpaint-grid {
@@ -1524,6 +1582,14 @@
     <div class="img-slider-container">
         <img class="img-comp-img img-method" src="static/images/outpaint/office_2/mvg/rgb_244_b.png">
         <img class="img-comp-img img-ours" src="static/images/outpaint/office_2/ours/rgb_244_b.png">
+        <!-- ✅ 新增：置中的 input 小圖（預設先用 active thumb 的那張） -->
+        <div class="input-overlay-wrap">
+        <img class="input-overlay" src="static/images/outpaint/office_2/input/rgb_244.png" alt="input overlay">
+       </div>
+
+        <!-- ✅ 新增：左下角 toggle -->
+        <button class="overlay-toggle" type="button">Input overlay: ON</button>
+
         <div class="img-slider-control">
             <div class="img-slider-handle"></div>
         </div>
@@ -1576,6 +1642,16 @@
     <div class="img-slider-container">
         <img class="img-comp-img img-method" src="static/images/outpaint/room_2/mvg/rgb_61_b.png">
         <img class="img-comp-img img-ours" src="static/images/outpaint/room_2/ours/rgb_61_b.png">
+        
+        <!-- ✅ 新增：置中的 input 小圖（預設先用 active thumb 的那張） -->
+        <div class="input-overlay-wrap">
+        <img class="input-overlay" src="static/images/outpaint/room_2/input/rgb_61.png" alt="input overlay">
+        </div>
+        <!-- ✅ 新增：左下角 toggle -->
+        <button class="overlay-toggle" type="button">Input overlay: ON</button>
+
+
+
         <div class="img-slider-control">
             <div class="img-slider-handle"></div>
         </div>
@@ -1625,6 +1701,13 @@
     <div class="img-slider-container">
         <img class="img-comp-img img-method" src="static/images/outpaint/94ee/mvg/DSC03057_b.png">
         <img class="img-comp-img img-ours" src="static/images/outpaint/94ee/ours/DSC03057_b.png">
+        <!-- ✅ 新增：置中的 input 小圖（預設先用 active thumb 的那張） -->
+        <div class="input-overlay-wrap">
+        <img class="input-overlay" src="static/images/outpaint/94ee/input/DSC03057.png" alt="input overlay">
+        </div>
+
+        <!-- ✅ 新增：左下角 toggle -->
+      <button class="overlay-toggle" type="button">Input overlay: ON</button>
         <div class="img-slider-control">
             <div class="img-slider-handle"></div>
         </div>
@@ -1682,6 +1765,14 @@
     <div class="img-slider-container">
         <img class="img-comp-img img-method" src="static/images/outpaint/office_2/seva/rgb_244_b.png">
         <img class="img-comp-img img-ours" src="static/images/outpaint/office_2/ours/rgb_244_b.png">
+          <!-- ✅ 新增：置中的 input 小圖（預設先用 active thumb 的那張） -->
+      <div class="input-overlay-wrap">
+      <img class="input-overlay" src="static/images/outpaint/office_2/input/rgb_244.png" alt="input overlay">
+      </div>
+
+      <!-- ✅ 新增：左下角 toggle -->
+      <button class="overlay-toggle" type="button">Input overlay: ON</button>
+
         <div class="img-slider-control">
             <div class="img-slider-handle"></div>
         </div>
@@ -1732,6 +1823,14 @@
     <div class="img-slider-container">
         <img class="img-comp-img img-method" src="static/images/outpaint/room_2/seva/rgb_61_b.png">
         <img class="img-comp-img img-ours" src="static/images/outpaint/room_2/ours/rgb_61_b.png">
+          <!-- ✅ 新增：置中的 input 小圖（預設先用 active thumb 的那張） -->
+        <div class="input-overlay-wrap">
+        <img class="input-overlay" src="static/images/outpaint/room_2/input/rgb_61.png" alt="input overlay">
+        </div>
+
+        <!-- ✅ 新增：左下角 toggle -->
+        <button class="overlay-toggle" type="button">Input overlay: ON</button>
+
         <div class="img-slider-control">
             <div class="img-slider-handle"></div>
         </div>
@@ -1743,7 +1842,7 @@
 </div>
 
 </div>
-<div class="comparison-container" data-scene="deva_room_0" data-section="outpainting">
+<div class="comparison-container" data-scene="seva_room_0" data-section="outpainting">
     <div class="video-wrapper">
         <video class="comparison-video video-comparison" autoplay muted loop playsinline>
             <source class="source-comparison" src="static/videos/Replica_6_seva/room_2/ours.mp4" type="video/mp4">
@@ -1781,6 +1880,15 @@
     <div class="img-slider-container">
         <img class="img-comp-img img-method" src="static/images/outpaint/94ee/seva/DSC03057_b.png">
         <img class="img-comp-img img-ours" src="static/images/outpaint/94ee/ours/DSC03057_b.png">
+          <!-- ✅ 新增：置中的 input 小圖（預設先用 active thumb 的那張） -->
+      <div class="input-overlay-wrap">
+      <img class="input-overlay" src="static/images/outpaint/94ee/input/DSC03057.png" alt="input overlay">
+      </div>
+
+      <!-- ✅ 新增：左下角 toggle -->
+      <button class="overlay-toggle" type="button">Input overlay: ON</button>
+
+
         <div class="img-slider-control">
             <div class="img-slider-handle"></div>
         </div>
@@ -2446,6 +2554,134 @@
       initDots();
       updateCarousel();
   }
+
+function getObjectFitContentBox(imgEl, containerEl) {
+  const contW = containerEl.clientWidth;
+  const contH = containerEl.clientHeight;
+
+  const natW = imgEl.naturalWidth;
+  const natH = imgEl.naturalHeight;
+
+  if (!natW || !natH || !contW || !contH) return null;
+
+  const fit = getComputedStyle(imgEl).objectFit || 'fill';
+
+  // scale for cover / contain
+  const scaleX = contW / natW;
+  const scaleY = contH / natH;
+
+  let scale = 1;
+  if (fit === 'cover')   scale = Math.max(scaleX, scaleY);
+  else if (fit === 'contain') scale = Math.min(scaleX, scaleY);
+  else if (fit === 'none') scale = 1;
+  else if (fit === 'fill') {
+    // fill: 直接拉伸到滿
+    return { x: 0, y: 0, w: contW, h: contH };
+  } else {
+    // default treat as cover-ish
+    scale = Math.max(scaleX, scaleY);
+  }
+
+  const drawnW = natW * scale;
+  const drawnH = natH * scale;
+
+  // object-position（預設 50% 50%）
+  const pos = (getComputedStyle(imgEl).objectPosition || '50% 50%').split(' ');
+  const posX = parseFloat(pos[0]) / 100 || 0.5;
+  const posY = parseFloat(pos[1]) / 100 || 0.5;
+
+  // drawn image 在 container 內的左上角（可能是負的：cover 的裁切）
+  const x = (contW - drawnW) * posX;
+  const y = (contH - drawnH) * posY;
+
+  return { x, y, w: drawnW, h: drawnH };
+}
+
+// --- Outpainting Input Overlay Logic ---
+
+function alignOverlayToOursCenter(wrapper) {
+  const oursImg = wrapper.querySelector('.img-ours');
+  const overlay = wrapper.querySelector('.input-overlay');
+  if (!oursImg || !overlay) return;
+
+  // 同步兩者的 object-position，確保 cover 的裁切點一致
+  const oursPos = getComputedStyle(oursImg).objectPosition;
+  overlay.style.objectPosition = oursPos;
+}
+
+(function initOutpaintSystem() {
+  // 1. 初始化縮圖與 Overlay 的關聯
+  function updateOverlayFromThumb(thumb) {
+    const wrapper = thumb.closest('.img-comp-wrapper');
+    const overlayImg = wrapper.querySelector('.input-overlay');
+    if (overlayImg) {
+      overlayImg.src = thumb.src;
+      // 點擊縮圖後重新校準
+      requestAnimationFrame(() => alignOverlayToOursCenter(wrapper));
+    }
+  }
+
+  // 2. 監聽點擊事件 (使用事件委派處理開關與縮圖)
+  document.addEventListener('click', (e) => {
+    // 處理 Overlay 開關
+    const toggleBtn = e.target.closest('.overlay-toggle');
+    if (toggleBtn) {
+      const container = toggleBtn.closest('.img-slider-container');
+      const isOff = container.classList.toggle('overlay-off');
+      toggleBtn.textContent = isOff ? 'Input overlay: OFF' : 'Input overlay: ON';
+      return;
+    }
+
+    // 處理縮圖切換
+    const thumb = e.target.closest('.thumb-item');
+    if (thumb) {
+      const wrapper = thumb.closest('.img-comp-wrapper');
+      // 切換 Active class
+      wrapper.querySelectorAll('.thumb-item').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      
+      // 更新大圖 (原本的邏輯)
+      const methodImg = wrapper.querySelector('.img-method');
+      const oursImg = wrapper.querySelector('.img-ours');
+      const id = thumb.dataset.id;
+      const scenePath = wrapper.dataset.scenePath;
+      const methodPrefix = wrapper.dataset.method; // 'mvg' or 'seva'
+
+      if (id && scenePath) {
+        methodImg.src = `static/images/outpaint/${scenePath}/${methodPrefix}/rgb_${id}_b.png`;
+        oursImg.src = `static/images/outpaint/${scenePath}/ours/rgb_${id}_b.png`;
+        // 更新疊加層
+        updateOverlayFromThumb(thumb);
+      }
+    }
+  });
+
+  // 3. 處理切換 Tab (Method) 時的重新對齊
+  document.querySelectorAll('.outpainting-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      requestAnimationFrame(() => {
+        const activeScenes = document.querySelector('.outpainting-scenes.active');
+        if (activeScenes) {
+          activeScenes.querySelectorAll('.img-comp-wrapper').forEach(alignOverlayToOursCenter);
+        }
+      });
+    });
+  });
+
+  // 4. 視窗縮放監聽
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.img-comp-wrapper').forEach(alignOverlayToOursCenter);
+  });
+
+  // 5. 首次載入執行
+  window.addEventListener('load', () => {
+    document.querySelectorAll('.img-comp-wrapper').forEach(wrapper => {
+      const activeThumb = wrapper.querySelector('.thumb-item.active');
+      if (activeThumb) updateOverlayFromThumb(activeThumb);
+    });
+  });
+})();
+
 </script>
 
 </body>
