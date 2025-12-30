@@ -2369,10 +2369,9 @@
     // 4. 更新函式：讓切換時也能更新作者 (關鍵修改)
     // ==========================================
     
-    // 更新互動比較區段的影片
-    function updateInteractiveVideos() {
+function updateInteractiveVideos() {
   const interactiveContainers = document.querySelectorAll('[data-section="interactive"]');
-      
+
   interactiveContainers.forEach(container => {
     const scene = container.dataset.scene;
     const sourceComparison = container.querySelector('.source-comparison');
@@ -2382,20 +2381,24 @@
     const methodLabel = container.querySelector('.method-label');
 
     if (videoData[scene] && videoData[scene][currentMethod]) {
+      // 不再依賴 lazy loader，直接改 src
+      sourceComparison.removeAttribute('data-src');
+      sourceOurs.removeAttribute('data-src');
 
-      // 確保 src 從此只由 lazy loader 控制
-      sourceComparison.removeAttribute('src');
-      sourceOurs.removeAttribute('src');
+      sourceComparison.src = videoData[scene][currentMethod];
+      sourceOurs.src = videoData[scene]['ours'];
 
-      // 更新 data-src，給 lazy loader 用
-      sourceComparison.setAttribute('data-src', videoData[scene][currentMethod]);
-      sourceOurs.setAttribute('data-src', videoData[scene]['ours']);
+      // 重新載入 + 播放
+      videoComparison.load();
+      videoOurs.load();
 
-      // 讓 lazy loader 有機會重新載（reset 狀態）
-      videoComparison.removeAttribute('data-loaded');
-      videoOurs.removeAttribute('data-loaded');
+      videoComparison.play().catch(() => {});
+      videoOurs.play().catch(() => {});
 
-      methodLabel.textContent = methodNames[currentMethod];
+      // 更新左上角標籤
+      if (methodLabel) {
+        methodLabel.textContent = methodNames[currentMethod];
+      }
     }
   });
 
