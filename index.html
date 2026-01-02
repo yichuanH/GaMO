@@ -1044,6 +1044,7 @@
       </div>
       
       <!-- Teaser Image 移到 container 外面 -->
+<<<<<<< HEAD
       <div style="margin-top: 30px; text-align: center;">
         <img src="static/images/teaser.png" alt="GaMO Overview" 
              style="width: 80%; max-width: 1400px; display: inline-block;">
@@ -1253,16 +1254,49 @@
         <!-- 指示圓點 -->
         <div class="carousel-dots" id="carouselDots"></div>
       </div>
+=======
+      <!-- Teaser Video -->
+      <div style="margin-top: 30px; text-align: center;">
+        <video autoplay muted loop playsinline
+              style="width: 60%; max-width: 1400px; display: inline-block;">
+          <source src="static/videos/2x3_compress.mp4" type="video/mp4">
+          Your browser does not support HTML5 video.
+        </video>
+      </div>
+
+
+     
+>>>>>>> a58ce95 (init GaMO project page)
 
     </div>
 </section>
 
+<<<<<<< HEAD
 <!-- Abstract Section -->
 <section class="section" style="padding: 40px 0;">
   <div class="container is-max-desktop">
     <div class="columns is-centered">
       <div class="column is-10">
         <h2 class="title is-3" style="text-align: center; margin-bottom: 30px;">Abstract</h2>
+=======
+
+
+
+<!-- Abstract Section -->
+<section class="section" style="padding: 40px 0;">
+  <div class="container is-max-desktop">
+
+  
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <h2 class="title is-3" style="text-align: center; margin-bottom: 30px;">Abstract</h2>
+         <div style="margin-top: 30px; text-align: center;">
+        <img src="static/images/teaser.png" alt="GaMO Overview" 
+             style="width: 100%; max-width: 1400px; display: inline-block;  margin-bottom: 20px;">
+        </div>
+
+
+>>>>>>> a58ce95 (init GaMO project page)
         <div class="content has-text-justified" style="font-size: 14px; line-height: 1.6;">
           <p>
             Recent advances in 3D reconstruction have achieved remarkable progress in high-quality scene capture from dense multi-view imagery, yet struggle when input views are limited. Various approaches, including regularization techniques, semantic priors, and geometric constraints, have been implemented to address this challenge. Latest diffusion-based methods have demonstrated substantial improvements by generating novel views from new camera poses to augment training data, surpassing earlier regularization and prior-based techniques. Despite this progress, we identify three critical limitations in these state-of-the-art approaches: inadequate coverage beyond known view peripheries, geometric inconsistencies across generated views, and computationally expensive pipelines. We introduce <strong>GaMO (Geometry-aware Multi-view Outpainter)</strong>, a framework that reformulates sparse-view reconstruction through multi-view outpainting. Instead of generating new viewpoints, GaMO expands the field of view from existing camera poses, which inherently preserves geometric consistency while providing broader scene coverage. Our approach employs multi-view conditioning and geometry-aware denoising strategies in a zero-shot manner without training. Extensive experiments on Replica and ScanNet++ demonstrate state-of-the-art reconstruction quality across 3, 6, and 9 input views, outperforming prior methods in PSNR and LPIPS, while achieving a <strong>25× speedup</strong> over SOTA diffusion-based methods with processing time under 10 minutes.
